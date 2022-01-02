@@ -1,27 +1,21 @@
 import Machinat from '@machinat/core';
 import { build } from '@machinat/script';
-import {
-  $,
-  IF,
-  THEN,
-  PROMPT,
-  CALL,
-  EFFECT,
-  RETURN,
-} from '@machinat/script/keywords';
+import * as $ from '@machinat/script/keywords';
 import SettingsCard from '../components/SettingsCard';
 import Pause from '../components/Pause';
-import { ACTION_UNKNOWN, ACTION_SETTINGS_UPDATED } from '../constant';
+import getVtuber from '../utils/getVtuber';
+import { ACTION } from '../constant';
 import type {
-  PomodoroSettings,
-  PomodoroEventContext,
-  PomodoroScriptYield,
+  AppSettings,
+  AppEventContext,
+  // AppScriptYield,
   AppActionType,
 } from '../types';
-import AskingTimezone from './AskingTimezone';
+import SelectOshi from './SelectOshi';
+import SelectSubscriptions from './SelectSubscriptions';
 
 type BeginningParams = {
-  settings: PomodoroSettings;
+  settings: AppSettings;
 };
 
 type BeginningVars = BeginningParams & {
@@ -33,7 +27,7 @@ type BeginningReturn = BeginningParams;
 
 export default build<
   BeginningVars,
-  PomodoroEventContext,
+  AppEventContext,
   BeginningParams,
   BeginningReturn
 >(
@@ -41,61 +35,66 @@ export default build<
     name: 'Beginning',
     initVars: ({ settings }) => ({
       settings,
-      action: ACTION_UNKNOWN,
+      action: ACTION.UNKNOWN,
       shouldSaveTz: false,
     }),
   },
-  <$<BeginningVars>>
+  <$.BLOCK<BeginningVars>>
     {() => (
       <>
-        <p>Hello! 🍅</p>
-        <p>I'm a Pomodoro Timer Bot 🤖</p>
+        <p>Hello! 👋</p>
+        <p>I'm HoloPomodoro Bot 🤖</p>
         <Pause />
       </>
     )}
 
-    <IF
-      condition={({ platform }) =>
-        platform === 'telegram' || platform === 'line'
-      }
-    >
-      <THEN>
-        {() => (
-          <>
-            I need to know your timezone to count 🍅
-            <Pause />
-          </>
-        )}
-        <CALL<BeginningVars, typeof AskingTimezone>
-          script={AskingTimezone}
-          key="ask-timezone"
-          params={({ vars: { settings } }) => ({ timezone: settings.timezone })}
-          set={({ vars }, { timezone }) => {
-            const { settings } = vars;
-            return {
-              ...vars,
-              settings: {
-                ...settings,
-                timezone: timezone || settings.timezone,
-              },
-              shouldSaveTz: timezone !== settings.timezone,
-            };
-          }}
-        />
+    <$.CALL<BeginningVars, typeof SelectOshi>
+      script={SelectOshi}
+      params={({ vars: { settings } }) => ({ settings })}
+      key="select-oshi"
+      set={({ vars }, { settings }) => ({ ...vars, settings })}
+    />
 
-        <EFFECT<BeginningVars, PomodoroScriptYield>
-          yield={({ vars }, prev) => ({
-            ...prev,
-            updateSettings: vars.shouldSaveTz
-              ? {
-                  ...prev?.updateSettings,
-                  timezone: vars.settings.timezone,
-                }
-              : undefined,
-          })}
-        />
-      </THEN>
-    </IF>
+    {({ vars }) => {
+      const vtuber = getVtuber(vars.settings.oshi);
+      return vtuber ? (
+        <p>
+          {vtuber.lang.hello}! {vtuber.lang.fanName}
+        </p>
+      ) : (
+        <p>Ok, you can change your mind anytime</p>
+      );
+    }}
+
+    <$.CALL<BeginningVars, typeof SelectSubscriptions>
+      script={SelectSubscriptions}
+      key="select-subscriptions"
+      params={({ vars: { settings } }) => ({ settings })}
+      set={({ vars }, { settings }) => {
+        return { ...vars, settings };
+      }}
+    />
+
+    {({ vars: { settings } }) => {
+      const { oshi, subscriptions } = settings;
+      const vtuber = getVtuber(oshi);
+      return subscriptions.length === 0 ? (
+        <p>You can tell me to "subscribe" anytime {vtuber?.lang.postfix}</p>
+      ) : vtuber && !subscriptions.includes(vtuber.id) ? (
+        <p>
+          I can't believe you don't choose {vtuber?.lang.selfCall || 'me'} 😭
+        </p>
+      ) : subscriptions.length === 1 ? (
+        <p>
+          Thanks for choosing only {vtuber?.lang.selfCall || 'me'}{' '}
+          {vtuber?.lang.postfix} 😉
+        </p>
+      ) : subscriptions.length > 10 ? (
+        <p>You choose so many girls {vtuber?.lang.postfix} 😡</p>
+      ) : (
+        <p>I see who you like {vtuber?.lang.postfix} 😏</p>
+      );
+    }}
 
     {({ vars }) => (
       <>
@@ -110,7 +109,7 @@ export default build<
       </>
     )}
 
-    <PROMPT<BeginningVars, PomodoroEventContext>
+    <$.PROMPT<BeginningVars, AppEventContext>
       key="confirm-settings"
       set={async ({ vars }, { event, intent }) => ({
         ...vars,
@@ -123,7 +122,7 @@ export default build<
     />
 
     {({ vars: { action, settings } }) => {
-      const isUpdated = action === ACTION_SETTINGS_UPDATED;
+      const isUpdated = action === ACTION.SETTINGS_UPDATED;
       return (
         <>
           {isUpdated && (
@@ -139,8 +138,8 @@ export default build<
       );
     }}
 
-    <RETURN<BeginningVars, BeginningReturn>
+    <$.RETURN<BeginningVars, BeginningReturn>
       value={({ vars: { settings } }) => ({ settings })}
     />
-  </$>
+  </$.BLOCK>
 );

@@ -3,7 +3,7 @@ import Messenger from '@machinat/messenger';
 import Telegram from '@machinat/telegram';
 import Line from '@machinat/line';
 import encodePostbackData from '../utils/encodePostbackData';
-import { ACTION_MESSENGER_GETTING_START } from '../constant';
+import { ACTION, WEBVIEW_PATH } from '../constant';
 
 const {
   DOMAIN,
@@ -23,12 +23,50 @@ export const up = makeContainer({
   await messengerBot.makeApiCall('POST', 'me/messenger_profile', {
     whitelisted_domains: [ENTRY_URL],
     get_started: {
-      payload: encodePostbackData({ action: ACTION_MESSENGER_GETTING_START }),
+      payload: encodePostbackData({ action: ACTION.MESSENGER_GETTING_START }),
     },
     greeting: [
       {
         locale: 'default',
         text: '🍅 Pomodoro Bot 🤖',
+      },
+    ],
+  });
+
+  // add persistent buttons to open webview
+  await messengerBot.makeApiCall('POST', 'me/messenger_profile', {
+    persistent_menu: [
+      {
+        locale: 'default',
+        composer_input_disabled: false,
+        call_to_actions: [
+          {
+            type: 'postback',
+            title: '📼 Watch a Clip',
+            payload: encodePostbackData({ action: ACTION.GET_CLIP }),
+          },
+          {
+            type: 'web_url',
+            title: '📺 Subscriptions',
+            url: `${ENTRY_URL}/webview/${WEBVIEW_PATH.SUBSCRIPTIONS}?platform=messenger`,
+            webview_height_ratio: 'full',
+            messenger_extensions: true,
+          },
+          {
+            type: 'web_url',
+            title: '📊 Statistics',
+            url: `${ENTRY_URL}/webview/${WEBVIEW_PATH.STATISTICS}?platform=messenger`,
+            webview_height_ratio: 'full',
+            messenger_extensions: true,
+          },
+          {
+            type: 'web_url',
+            title: '⚙️ Edit Settings',
+            url: `${ENTRY_URL}/webview/${WEBVIEW_PATH.SETTINGS}?platform=messenger`,
+            webview_height_ratio: 'full',
+            messenger_extensions: true,
+          },
+        ],
       },
     ],
   });
@@ -51,6 +89,16 @@ export const up = makeContainer({
   // setup webhook of the Telegram bot
   await telegramBot.makeApiCall('setWebhook', {
     url: `${ENTRY_URL}/webhook/telegram/${TELEGRAM_SECRET_PATH}`,
+  });
+
+  // add command for telegram bot
+  await telegramBot.makeApiCall('setMyCommands', {
+    commands: [
+      { command: 'clip', description: '📼 Watch a Clip' },
+      { command: 'subscriptions', description: '📺 Subscriptions' },
+      { command: 'statistics', description: '📊 Statistics' },
+      { command: 'settings', description: '⚙️ Settings' },
+    ],
   });
 
   // setup webhook of the LINE channel
@@ -88,6 +136,9 @@ export const down = makeContainer({
       object: 'page',
     }
   );
+
+  // clear commands of the Telegram bot
+  await telegramBot.makeApiCall('setMyCommands', { commands: [] });
 
   // delete webhook of the Telegram bot
   await telegramBot.makeApiCall('deleteWebhook');

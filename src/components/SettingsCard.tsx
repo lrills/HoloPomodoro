@@ -1,10 +1,12 @@
 import Machinat from '@machinat/core';
-import { ACTION_OK, WEBVIEW_SETTINGS_PATH } from '../constant';
-import type { PomodoroSettings } from '../types';
+// @ts-ignore
+import clipLanguages from '../../clipLanguages.json';
+import { ACTION, WEBVIEW_PATH } from '../constant';
+import type { AppSettings } from '../types';
 import ButtonsCard, { ButtonData } from './ButtonsCard';
 
 type SettingsCardProps = {
-  settings: PomodoroSettings;
+  settings: AppSettings;
   noTitle?: boolean;
   withEditButton?: boolean;
   withOkButton?: boolean;
@@ -21,11 +23,14 @@ const SettingsCard = ({
       ? ''
       : `⚙️ Settings:
 `
-  }‣ 🍅 Time:   ${settings.workingMins} min
+  }‣ 🍅 Time:    ${settings.workingMins} min
 ‣ Short Break: ${settings.shortBreakMins} min
-‣ Long Break: ${settings.longBreakMins} min
-‣ 🍅 per Day: ${settings.pomodoroPerDay}
-‣ Timezone:  ${settings.timezone >= 0 ? '+' : ''}${settings.timezone}`;
+‣ Long Break:  ${settings.longBreakMins} min
+‣ 🍅 per Day:  ${settings.pomodoroPerDay}
+‣ Timezone:    ${settings.timezone >= 0 ? '+' : ''}${settings.timezone}
+‣ Clip Language: ${settings.clipLanguages
+    .map((code) => clipLanguages[code])
+    .join(', ')}`;
 
   if (!withEditButton && !withOkButton) {
     return <p>{settingsDesc}</p>;
@@ -36,11 +41,11 @@ const SettingsCard = ({
     buttons.push({
       type: 'webview',
       text: 'Edit 📝',
-      path: WEBVIEW_SETTINGS_PATH,
+      path: WEBVIEW_PATH.SETTINGS,
     });
   }
   if (withOkButton) {
-    buttons.push({ type: 'action', text: 'Ok 👍', action: ACTION_OK });
+    buttons.push({ type: 'action', text: 'Ok 👍', action: ACTION.OK });
   }
 
   return (

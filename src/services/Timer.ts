@@ -15,6 +15,8 @@ type TimeUpListener = (timeUpTargets: TimerData[]) => void;
 const getDueTimeInterval = (dueDate: Date) =>
   Math.ceil(dueDate.getTime() / 10000);
 
+const getIntervalId = (i) => `timer:${i.toString()}`;
+
 export class Timer {
   stateController: StateController;
   private _intervalId: null | NodeJS.Timeout;
@@ -47,7 +49,7 @@ export class Timer {
     }
 
     await this.stateController
-      .globalState(interval.toString())
+      .globalState(getIntervalId(interval))
       .set<TimerData>(channel.uid, { channel });
   }
 
@@ -61,7 +63,7 @@ export class Timer {
     }
 
     const isDeleted = await this.stateController
-      .globalState(interval.toString())
+      .globalState(getIntervalId(interval))
       .delete(channel.uid);
     return isDeleted;
   }
@@ -77,7 +79,9 @@ export class Timer {
     }
     this._currentInterval = interval;
 
-    const minuteState = this.stateController.globalState(interval.toString());
+    const minuteState = this.stateController.globalState(
+      getIntervalId(interval)
+    );
 
     const timingChats = await minuteState.getAll<TimerData>();
     if (timingChats.size === 0) {

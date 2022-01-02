@@ -5,6 +5,18 @@ import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import Input from '@mui/material/Input';
 
+type NummericSettingProps = {
+  fieldName: string;
+  fieldId: string;
+  onChange: (val: number) => void;
+  value: number;
+  min: number;
+  max: number;
+  step?: number;
+  unit: string;
+  disabled: boolean;
+};
+
 const NummericSetting = ({
   onChange,
   fieldName,
@@ -12,9 +24,10 @@ const NummericSetting = ({
   value,
   min,
   max,
+  step,
   unit,
   disabled,
-}) => {
+}: NummericSettingProps) => {
   const [inputValue, setInputValue] = React.useState<
     string | number | undefined
   >();
@@ -44,6 +57,8 @@ const NummericSetting = ({
           onChangeCommitted={handleChangeCompleted}
           min={min}
           max={max}
+          step={step}
+          marks={!!step}
           valueLabelDisplay="auto"
           disabled={disabled}
         />

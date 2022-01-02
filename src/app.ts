@@ -12,19 +12,24 @@ import { FileState } from '@machinat/local-state';
 import DialogFlow from '@machinat/dialogflow';
 import Script from '@machinat/script';
 import * as scenesScirpts from './scenes';
+import useClip from './services/useClip';
 import useIntent from './services/useIntent';
 import useAppData from './services/useAppData';
 import useSettings from './services/useSettings';
 import useUserProfile from './services/useUserProfile';
+import ClipsManager, { ClipsManagerOptions } from './services/ClipsManager';
 import Timer from './services/Timer';
 import nextConfigs from '../webview/next.config.js';
-import { ServerDomain, LineLiffId } from './interface';
+import { ServerDomain, LineLiffId } from './constant';
 
 const {
   // location
   PORT,
   DOMAIN,
   NODE_ENV,
+  // clips
+  CLIPS_AVAILABLE_HOURS,
+  HOLODEX_API_KEY,
   // messenger
   MESSENGER_PAGE_ID,
   MESSENGER_ACCESS_TOKEN,
@@ -95,7 +100,7 @@ const app = Machinat.createApp({
       appSecret: MESSENGER_APP_SECRET,
       accessToken: MESSENGER_ACCESS_TOKEN,
       verifyToken: MESSENGER_VERIFY_TOKEN,
-      optionalProfileFields: ['timezone'],
+      optionalProfileFields: ['timezone', 'locale'],
     }),
 
     Telegram.initModule({
@@ -130,20 +135,31 @@ const app = Machinat.createApp({
   ],
 
   services: [
-    Timer,
-    useIntent,
-    useAppData,
-    useSettings,
-    useUserProfile,
+    // webview
     {
       provide: Webview.AuthenticatorList,
       withProvider: MessengerAuthenticator,
     },
     { provide: Webview.AuthenticatorList, withProvider: TelegramAuthenticator },
     { provide: Webview.AuthenticatorList, withProvider: LineAuthenticator },
-
     { provide: ServerDomain, withValue: DOMAIN },
     { provide: LineLiffId, withValue: LINE_LIFF_ID },
+    // app
+    useClip,
+    useIntent,
+    useAppData,
+    useSettings,
+    useUserProfile,
+    Timer,
+    ClipsManager,
+    {
+      provide: ClipsManagerOptions,
+      withValue: {
+        clipsAvailableHours: CLIPS_AVAILABLE_HOURS,
+        holodexApiKey: HOLODEX_API_KEY,
+        refreshLastestHours: 2,
+      },
+    },
   ],
 });
 

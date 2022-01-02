@@ -15,17 +15,10 @@ export default makeFactoryProvider({
         return data;
       }
 
-      const originalSettings = data.settings;
-      const validKeys = Object.keys(originalSettings);
-
-      const newSettings = { ...originalSettings };
-      Object.entries(updates).forEach(([key, value]) => {
-        if (validKeys.includes(key) && value !== undefined) {
-          newSettings[key] = value;
-        }
-      });
-
-      return { ...data, settings: newSettings };
+      return {
+        ...data,
+        settings: { ...data.settings, ...updates },
+      };
     });
 
     return settings;

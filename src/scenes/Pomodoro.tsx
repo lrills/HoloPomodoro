@@ -1,19 +1,15 @@
 import Machinat from '@machinat/core';
 import { build } from '@machinat/script';
-import { $, WHILE, CALL, EFFECT } from '@machinat/script/keywords';
+import * as $ from '@machinat/script/keywords';
 import currentDayId from '../utils/currentDayId';
 import { TimingPhase } from '../constant';
-import type {
-  PomodoroSettings,
-  PomodoroEventContext,
-  PomodoroScriptYield,
-} from '../types';
+import type { AppSettings, AppEventContext, AppScriptYield } from '../types';
 import Starting from './Starting';
 import Timing from './Timing';
 import Beginning from './Beginning';
 
 type PomodoroParams = {
-  settings: PomodoroSettings;
+  settings: AppSettings;
 };
 
 type PomodoroVars = PomodoroParams & {
@@ -28,10 +24,10 @@ type PomodoroVars = PomodoroParams & {
 
 export default build<
   PomodoroVars,
-  PomodoroEventContext,
+  AppEventContext,
   PomodoroParams,
   void,
-  PomodoroScriptYield
+  AppScriptYield
 >(
   {
     name: 'Pomodoro',
@@ -46,8 +42,8 @@ export default build<
       pomodoroRecord: null,
     }),
   },
-  <$<PomodoroVars>>
-    <CALL<PomodoroVars, typeof Beginning>
+  <$.BLOCK<PomodoroVars>>
+    <$.CALL<PomodoroVars, typeof Beginning>
       key={'beginning'}
       script={Beginning}
       params={({ vars: { settings } }) => ({ settings })}
@@ -55,8 +51,8 @@ export default build<
     />
 
     {/* app event loop */}
-    <WHILE<PomodoroVars> condition={() => true}>
-      <CALL<PomodoroVars, typeof Starting>
+    <$.WHILE<PomodoroVars> condition={() => true}>
+      <$.CALL<PomodoroVars, typeof Starting>
         script={Starting}
         key="wait-starting"
         params={({ vars }) => ({ ...vars })}
@@ -91,14 +87,14 @@ export default build<
         }}
       />
 
-      <EFFECT<PomodoroVars, PomodoroScriptYield>
+      <$.EFFECT<PomodoroVars, AppScriptYield>
         yield={({ vars }, prev) => ({
           ...prev,
           registerTimer: vars.registerTimerAt,
         })}
       />
 
-      <CALL<PomodoroVars, typeof Timing>
+      <$.CALL<PomodoroVars, typeof Timing>
         script={Timing}
         key="wait-timing"
         params={({ vars }) => {
@@ -137,13 +133,13 @@ export default build<
         }}
       />
 
-      <EFFECT<PomodoroVars, PomodoroScriptYield>
+      <$.EFFECT<PomodoroVars, AppScriptYield>
         yield={({ vars }, prev) => ({
           ...prev,
           recordPomodoro: vars.pomodoroRecord || undefined,
           cancelTimer: vars.registerTimerAt,
         })}
       />
-    </WHILE>
-  </$>
+    </$.WHILE>
+  </$.BLOCK>
 );

@@ -1,50 +1,53 @@
 import Machinat from '@machinat/core';
-import { makeContainer } from '@machinat/core/service';
-import useAppData from '../services/useAppData';
-import { WEBVIEW_STATISTICS_PATH } from '../constant';
-import type { AppChannel } from '../types';
+import { WEBVIEW_PATH } from '../constant';
+import type { AppSettings, Statistics } from '../types';
 import ButtonsCard from './ButtonsCard';
+import PomodoroIcon from './PomodoroIcon';
 
 type StatisticsCardProps = {
-  channel: AppChannel;
+  oshi: null | string;
+  settings: AppSettings;
+  statistics: Statistics;
   noTitle?: boolean;
 };
 
-export default makeContainer({ deps: [useAppData] })(function StatisticsCard(
-  getAppData
-) {
-  return async ({ channel, noTitle = false }: StatisticsCardProps) => {
-    const { settings, statistics } = await getAppData(channel);
-    const { records, recentCounts } = statistics;
+const StatisticsCard = ({
+  oshi,
+  settings,
+  statistics,
+  noTitle = false,
+}: StatisticsCardProps) => {
+  const { records, recentCounts } = statistics;
 
-    const recentSum = recentCounts.reduce((sum, [, count]) => sum + count, 0);
-    const recentDays = recentCounts.length;
+  const recentSum = recentCounts.reduce((sum, [, count]) => sum + count, 0);
+  const recentDays = recentCounts.length;
 
-    const recentAvg =
-      recentDays > 0 ? (recentSum / recentDays).toFixed(1) : '-';
-    const finishRate =
-      recentDays > 0
-        ? ((recentSum * 100) / (recentDays * settings.pomodoroPerDay)).toFixed()
-        : '-';
+  const recentAvg = recentDays > 0 ? (recentSum / recentDays).toFixed(1) : '-';
+  const finishRate =
+    recentDays > 0
+      ? ((recentSum * 100) / (recentDays * settings.pomodoroPerDay)).toFixed()
+      : '-';
 
-    const settingsDesc = `${
-      noTitle
-        ? ''
-        : `📜 Records:
-`
-    }‣ Today's 🍅: ${records.length}
-‣ Avg. 🍅:      ${recentAvg}
-‣ Finish Rate: ${finishRate}%`;
+  const settingsDesc = (
+    <>
+      {noTitle && '📜 Records:\n'}
+      ‣ Today's <PomodoroIcon oshi={oshi} />: {records.length}
+      <br />
+      ‣ Avg. <PomodoroIcon oshi={oshi} />: {recentAvg}
+      <br />‣ Finish Rate: {finishRate}%
+    </>
+  );
 
-    return (
-      <ButtonsCard
-        makeLineAltText={(template) => `${template.text}`}
-        buttons={[
-          { type: 'webview', text: 'More 📊', path: WEBVIEW_STATISTICS_PATH },
-        ]}
-      >
-        {settingsDesc}
-      </ButtonsCard>
-    );
-  };
-});
+  return (
+    <ButtonsCard
+      makeLineAltText={(template) => `${template.text}`}
+      buttons={[
+        { type: 'webview', text: 'More 📊', path: WEBVIEW_PATH.STATISTICS },
+      ]}
+    >
+      {settingsDesc}
+    </ButtonsCard>
+  );
+};
+
+export default StatisticsCard;

@@ -1,18 +1,30 @@
-export const STATE_KEY_APP_DATA = 'app_data';
-export const STATE_KEY_PROFILE = 'profile';
+import { makeInterface } from '@machinat/core/service';
 
-export const ACTION_MESSENGER_GETTING_START = 'messenger_getting_start';
-export const ACTION_START = 'start'; // Start timing
-export const ACTION_PAUSE = 'pause'; // Pause timing
-export const ACTION_SKIP = 'skip'; // Skip this timing phase
-export const ACTION_TIME_UP = 'time_up'; // Timing up
-export const ACTION_CHECK_SETTINGS = 'settings'; // Show settings
-export const ACTION_CHECK_STATISTICS = 'statistics'; // Show statistics
-export const ACTION_SETTINGS_UPDATED = 'settings_updated'; // Show settings
-export const ACTION_ABOUT = 'about'; // About this app
-export const ACTION_OK = 'ok';
-export const ACTION_NO = 'no';
-export const ACTION_UNKNOWN = 'unknown';
+export const ServerDomain = makeInterface<string>({ name: 'ServerDomain' });
+export const LineLiffId = makeInterface<string>({ name: 'LineLiffId' });
+
+export const STATE_KEY = {
+  APP_DATA: 'app_data' as const,
+  PROFILE: 'profile' as const,
+};
+
+export const ACTION = {
+  OK: 'ok' as const,
+  NO: 'no' as const,
+  START: 'start' as const,
+  PAUSE: 'pause' as const,
+  SKIP: 'skip' as const,
+  CHECK_SETTINGS: 'settings' as const,
+  CHECK_STATISTICS: 'statistics' as const,
+  GET_CLIP: 'clip' as const,
+  ABOUT: 'about' as const,
+  TIME_UP: 'time_up' as const,
+  SETTINGS_UPDATED: 'settings_updated' as const,
+  OSHI_UPDATED: 'oshi_updated' as const,
+  SUBSCRIPTIONS_UPDATED: 'subscriptions_updated' as const,
+  MESSENGER_GETTING_START: 'messenger_getting_start' as const,
+  UNKNOWN: 'unknown' as const,
+};
 
 export enum TimingPhase {
   Working,
@@ -20,5 +32,9 @@ export enum TimingPhase {
   LongBreak,
 }
 
-export const WEBVIEW_STATISTICS_PATH = 'statistics';
-export const WEBVIEW_SETTINGS_PATH = 'settings';
+export const WEBVIEW_PATH = {
+  STATISTICS: 'statistics' as const,
+  SETTINGS: 'settings' as const,
+  OSHI: 'oshi' as const,
+  SUBSCRIPTIONS: 'subscriptions' as const,
+};

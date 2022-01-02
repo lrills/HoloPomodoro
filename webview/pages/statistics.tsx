@@ -15,6 +15,7 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui';
 import ordinal from 'ordinal';
 import { PanelPageProps } from '../types';
+import getVtuber from '../utils/getVtuber';
 
 const StatisticsPanel = ({ appData }: PanelPageProps) => {
   const [chartWidth, setChartWidth] = React.useState(300);
@@ -31,10 +32,13 @@ const StatisticsPanel = ({ appData }: PanelPageProps) => {
   let finishRate = '-';
 
   let schedulerData;
-  let cheduleStartHour = 0;
-  let cheduleEndHour = 2;
-
+  let scheduleStartHour = 0;
+  let scheduleEndHour = 2;
   let barChartData: { x: string; y: number }[] = [];
+
+  const vtuber = getVtuber(appData?.settings.oshi);
+  const pomodoroIcon = vtuber?.pomodoroIcon || '🍅';
+  const vtuberColor = vtuber?.color.primary || 'red';
 
   if (appData) {
     const {
@@ -48,10 +52,10 @@ const StatisticsPanel = ({ appData }: PanelPageProps) => {
     schedulerData = records.map(([startDate, endDate], i) => ({
       startDate,
       endDate,
-      title: `${ordinal(i + 1)} 🍅`,
+      title: `${ordinal(i + 1)} ${pomodoroIcon}`,
     }));
-    cheduleStartHour = records[0]?.[0].getHours() || 0;
-    cheduleEndHour = (records.slice(-1)[0]?.[1].getHours() || 1) + 1;
+    scheduleStartHour = records[0]?.[0].getHours() || 0;
+    scheduleEndHour = (records[records.length - 1]?.[1].getHours() || 1) + 1;
 
     if (recentCounts.length > 0) {
       const recentSum = recentCounts.reduce((sum, [, count]) => sum + count, 0);
@@ -73,17 +77,18 @@ const StatisticsPanel = ({ appData }: PanelPageProps) => {
 
   return (
     <AppFrame
+      oshi={appData?.settings.oshi}
       title="Statistics"
       userProfile={appData?.userProfile}
       isProcessing={!appData}
     >
       <Container maxWidth="md" style={{ padding: '20px' }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h4" component="div">
-                  Today's 🍅
+                  Today's {pomodoroIcon}
                 </Typography>
                 <Typography variant="h2" component="div">
                   {todayCount}
@@ -95,38 +100,11 @@ const StatisticsPanel = ({ appData }: PanelPageProps) => {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Card>
-              <Scheduler data={schedulerData}>
-                <ViewState currentDate={appData?.statistics.day} />
-                <DayView
-                  displayName="schedule"
-                  startDayHour={cheduleStartHour}
-                  endDayHour={cheduleEndHour}
-                  cellDuration={60}
-                />
-                <Appointments
-                  appointmentComponent={({
-                    children,
-                    ...restProps
-                  }: Appointments.AppointmentProps) => (
-                    <Appointments.Appointment
-                      {...restProps}
-                      style={{ backgroundColor: '#e77' }}
-                    >
-                      {children}
-                    </Appointments.Appointment>
-                  )}
-                />
-              </Scheduler>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h4" component="div">
-                  Avg. 🍅
+                  Avg. {pomodoroIcon}
                 </Typography>
                 <Typography variant="h2" component="div">
                   {recentAvgCount}
@@ -138,7 +116,7 @@ const StatisticsPanel = ({ appData }: PanelPageProps) => {
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h4" component="div">
@@ -152,11 +130,38 @@ const StatisticsPanel = ({ appData }: PanelPageProps) => {
           </Grid>
 
           <Grid item xs={12} md={6}>
+            <Card>
+              <Scheduler data={schedulerData}>
+                <ViewState currentDate={appData?.statistics.day} />
+                <DayView
+                  displayName="schedule"
+                  startDayHour={scheduleStartHour}
+                  endDayHour={scheduleEndHour}
+                  cellDuration={60}
+                />
+                <Appointments
+                  appointmentComponent={({
+                    children,
+                    ...restProps
+                  }: Appointments.AppointmentProps) => (
+                    <Appointments.Appointment
+                      {...restProps}
+                      style={{ backgroundColor: vtuberColor }}
+                    >
+                      {children}
+                    </Appointments.Appointment>
+                  )}
+                />
+              </Scheduler>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
             <Paper ref={chartPaperRef}>
               <XYPlot width={chartWidth} height={300} xType="ordinal">
                 <XAxis tickLabelAngle={-45} tickSize={3} />
                 <YAxis />
-                <VerticalBarSeries data={barChartData} color="#e77" />
+                <VerticalBarSeries data={barChartData} color={vtuberColor} />
               </XYPlot>
             </Paper>
           </Grid>

@@ -2,15 +2,17 @@ import { ServiceScope } from '@machinat/core/service';
 import { Stream, fromApp } from '@machinat/stream';
 import main from './main';
 import app from './app';
+import { ACTION } from './constant';
 import Timer from './services/Timer';
+import ClipsManager from './services/ClipsManager';
 import { AppEventContext, ChatEventContext, WebEventContext } from './types';
 
 app.onError(console.error);
 app
   .start()
-  .then(() => {
+  .then(async () => {
     const timer$ = new Stream<AppEventContext>();
-    const [timer] = app.useServices([Timer]);
+    const [timer, clipsManager] = app.useServices([Timer, ClipsManager]);
     timer.start();
 
     timer.onTimesUp((targets) => {
@@ -31,11 +33,13 @@ app
               channel,
               user: null,
             },
+            intent: { type: ACTION.TIME_UP, confidence: 1, payload: null },
           },
         });
       }
     });
 
+    await clipsManager.refresh();
     main(fromApp(app) as Stream<ChatEventContext | WebEventContext>, timer$);
   })
   .catch(console.error);

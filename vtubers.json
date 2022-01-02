@@ -1,0 +1,74 @@
+[
+  {
+    "id": "UC1DCedRgGHBdm81E1llLhOQ",
+    "name": "兎田ぺこら",
+    "englishName": "Usada Pekora",
+    "org": "Hololive",
+    "group": "3rd Generation",
+    "photo": "https://yt3.ggpht.com/ytc/AKedOLSmHTeNNQp8A4AwsUPKzBa2ubDBWe6RSaG39mAYTw=s800-c-k-c0x00ffffff-no-rj",
+    "twitter": "usadapekora",
+    "oshiIcon": "👯",
+    "pomodoroIcon": "🥕",
+    "color": {
+      "primary": "#b6cfff",
+      "secondary": "#ecf1ff"
+    },
+    "lang": {
+      "selfCall": "Pekora",
+      "nickname": "Pekora",
+      "postfix": "peko",
+      "hello": "Hiya-peko",
+      "greeting": "Konpeko, konpeko, konpeko!",
+      "introduction": "I'm Usada Pekora, peko!",
+      "otsukare": "Otsupeko",
+      "fanName": "Nousagi"
+    }
+  },
+  {
+    "id": "UC-hM6YJuNYVAmUWxeIr9FeA",
+    "name": "さくらみこ",
+    "englishName": "Sakura Miko",
+    "org": "Hololive",
+    "photo": "https://yt3.ggpht.com/ytc/AKedOLQlZnbXr-RooUQezemDKu7alJrZcEMy8_5P07ILug=s800-c-k-c0x00ffffff-no-rj",
+    "twitter": "sakuramiko35",
+    "oshiIcon": "🌸",
+    "pomodoroIcon": "🌸",
+    "color": {
+      "primary": "#ff73a5",
+      "secondary": "#ffe0f1"
+    },
+    "lang": {
+      "selfCall": "Miko",
+      "nickname": "Mikochi",
+      "postfix": "nye~",
+      "hello": "Nya-hello",
+      "greeting": "Nya-hello~!",
+      "introduction": "Sakura Miko da yo~!",
+      "otsukare": "Otsumiko",
+      "fanName": "35p"
+    }
+  },
+  {
+    "id": "UCMwGHR0BTZuLsmjY_NT5Pwg",
+    "name": "Ninomae Ina'nis",
+    "englishName": "Ninomae Ina’nis",
+    "org": "Hololive",
+    "group": "English (Myth)",
+    "photo": "https://yt3.ggpht.com/ytc/AKedOLRFAFjEvIwiZ_MrQvdY8-QbJkqvahsi3La78Jf7=s800-c-k-c0x00ffffff-no-rj",
+    "twitter": "ninomaeinanis",
+    "oshiIcon": "🐙",
+    "pomodoroIcon": "🍪",
+    "color": {
+      "primary": "#57258a",
+      "secondary": "#cd9e35"
+    },
+    "lang": {
+      "hello": "Wah",
+      "nickname": "Ina",
+      "greeting": "Wah! Wah! Wah!",
+      "introduction": "Good morning, afternoon, evening!",
+      "otsukare": "Wah!",
+      "fanName": "Takodachi"
+    }
+  }
+]

@@ -1,14 +1,8 @@
 const currentDayId = (hourOffset: number): string => {
-  const now = new Date();
-  const d = new Date(
-    Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      now.getUTCHours() + hourOffset
-    )
-  );
-  return `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}`;
+  const date = new Date();
+  date.setUTCHours(date.getUTCHours() + hourOffset);
+
+  return date.toISOString().slice(0, 10);
 };
 
 export default currentDayId;

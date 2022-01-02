@@ -13,62 +13,66 @@ import type { LineChat, LineUser, LineEventContext } from '@machinat/line';
 import type MessengerAuthenticator from '@machinat/messenger/webview';
 import type LineAuthenticator from '@machinat/line/webview';
 import type TelegramAuthenticator from '@machinat/telegram/webview';
-import type {
-  WebviewEventContext,
-  ConnectEventValue,
-  DisconnectEventValue,
-} from '@machinat/webview';
-import type {
-  ACTION_ABOUT,
-  ACTION_CHECK_SETTINGS,
-  ACTION_SETTINGS_UPDATED,
-  ACTION_CHECK_STATISTICS,
-  ACTION_START,
-  ACTION_SKIP,
-  ACTION_PAUSE,
-  ACTION_TIME_UP,
-  ACTION_OK,
-  ACTION_NO,
-  ACTION_UNKNOWN,
-  WEBVIEW_SETTINGS_PATH,
-  WEBVIEW_STATISTICS_PATH,
-} from './constant';
+import type { WebviewEventContext } from '@machinat/webview';
+import type { ACTION, WEBVIEW_PATH } from './constant';
 
-export type PomodoroSettings = {
+export type LanguageConfig = {
+  selfCall: undefined | string;
+  nickname: string;
+  introduction: undefined | string;
+  postfix: undefined | string;
+  hello: string;
+  greeting: string;
+  otsukare: undefined | string;
+  fanName: string;
+};
+
+export type ColorConfig = {
+  primary: string;
+  secondary: string;
+};
+
+export type VtuberData = {
+  id: string;
+  name: string;
+  englishName: string;
+  org: string;
+  group: undefined | string;
+  photo: string;
+  twitter: string;
+  fanName: string;
+  oshiIcon: string;
+  pomodoroIcon: string;
+  color: ColorConfig;
+  lang: LanguageConfig;
+};
+
+export type AppSettings = {
+  oshi: null | string;
+  subscriptions: string[];
   workingMins: number;
   shortBreakMins: number;
   longBreakMins: number;
   pomodoroPerDay: number;
   timezone: number;
+  clipLanguages: string[];
 };
 
-export type PomodoroStatistics = {
+export type Statistics = {
   day: string;
   records: [Date, Date][];
   recentCounts: [string, number][];
 };
 
-export type PomodoroAppData = {
-  settings: PomodoroSettings;
-  statistics: PomodoroStatistics;
+export type AppData = {
+  settings: AppSettings;
+  statistics: Statistics;
+  clipsHistory: string[];
 };
 
-export type AppActionType =
-  | typeof ACTION_START
-  | typeof ACTION_SKIP
-  | typeof ACTION_PAUSE
-  | typeof ACTION_TIME_UP
-  | typeof ACTION_ABOUT
-  | typeof ACTION_CHECK_SETTINGS
-  | typeof ACTION_SETTINGS_UPDATED
-  | typeof ACTION_CHECK_STATISTICS
-  | typeof ACTION_OK
-  | typeof ACTION_NO
-  | typeof ACTION_UNKNOWN;
+export type AppActionType = typeof ACTION[keyof typeof ACTION];
 
-export type WebviewPath =
-  | typeof WEBVIEW_SETTINGS_PATH
-  | typeof WEBVIEW_STATISTICS_PATH;
+export type WebviewPath = typeof WEBVIEW_PATH[keyof typeof WEBVIEW_PATH];
 
 export type AppChannel = MessengerChat | TelegramChat | LineChat;
 export type AppUser = MessengerUser | TelegramUser | LineUser;
@@ -78,7 +82,7 @@ export type ChatEventContext =
   | TelegramEventContext
   | LineEventContext;
 
-export type AppTimeUpEvent = {
+export type TimeUpEvent = {
   platform: 'messenger' | 'telegram' | 'line';
   category: 'app';
   type: 'time_up';
@@ -87,21 +91,14 @@ export type AppTimeUpEvent = {
   channel: AppChannel;
 };
 
-export type AppSettingsUpdatedEvent = {
+export type SettingsUpdatedEvent = {
   platform: 'messenger' | 'telegram' | 'line';
   category: 'app';
-  type: 'settings_updated';
-  payload: { settings: PomodoroSettings };
+  type: 'settings_updated' | 'oshi_updated' | 'subscriptions_updated';
+  payload: { settings: AppSettings };
   user: AppUser;
   channel: AppChannel;
 };
-
-export type AppEventContext =
-  | ChatEventContext
-  | {
-      platform: 'messenger' | 'telegram' | 'line';
-      event: AppTimeUpEvent | AppSettingsUpdatedEvent;
-    };
 
 export type AppEventIntent = {
   type: AppActionType;
@@ -109,15 +106,16 @@ export type AppEventIntent = {
   payload: any;
 };
 
-export type WithIntent = {
-  intent: AppEventIntent;
-};
+export type AppEventContext = (
+  | ChatEventContext
+  | {
+      platform: 'messenger' | 'telegram' | 'line';
+      event: TimeUpEvent | SettingsUpdatedEvent;
+    }
+) & { intent: AppEventIntent };
 
-export type PomodoroEventContext = (ChatEventContext | AppEventContext) &
-  WithIntent;
-
-export type PomodoroScriptYield = {
-  updateSettings?: Partial<PomodoroSettings>;
+export type AppScriptYield = {
+  updateSettings?: Partial<AppSettings>;
   registerTimer?: Date;
   cancelTimer?: Date;
   recordPomodoro?: [Date, Date];
@@ -126,26 +124,40 @@ export type PomodoroScriptYield = {
 export type UpdateSettingsAction = {
   category: 'app';
   type: 'update_settings';
-  payload: { settings: Partial<PomodoroSettings> };
+  payload: { settings: Partial<AppSettings> };
 };
 
-export type GetDataAction = {
+export type UpdateOshiAction = {
   category: 'app';
-  type: 'get_data';
-  payload: null;
+  type: 'update_oshi';
+  payload: { oshi: null | string };
 };
 
-export type WebEventContext = WebviewEventContext<
-  MessengerAuthenticator | TelegramAuthenticator | LineAuthenticator,
-  | ConnectEventValue
-  | DisconnectEventValue
-  | UpdateSettingsAction
-  | GetDataAction
->;
+export type UpdateSubscriptionsAction = {
+  category: 'app';
+  type: 'update_subscriptions';
+  payload: { subscriptions: string[] };
+};
 
-export type WebAppData = {
-  settings: PomodoroSettings;
-  statistics: PomodoroStatistics;
+export type FetchDataAction = {
+  category: 'app';
+  type: 'fetch_data';
+  payload: { timezone: number };
+};
+
+export type WebviewAction =
+  | UpdateSettingsAction
+  | FetchDataAction
+  | UpdateOshiAction
+  | UpdateSubscriptionsAction;
+
+export type WebEventContext<Action extends WebviewAction = WebviewAction> =
+  WebviewEventContext<
+    MessengerAuthenticator | TelegramAuthenticator | LineAuthenticator,
+    Action
+  >;
+
+export type WebAppData = AppData & {
   userProfile: null | MachinatProfile;
 };
 
@@ -158,7 +170,18 @@ export type WebAppDataPush = {
 export type WebSettingsUpdatedPush = {
   category: 'app';
   type: 'settings_updated';
-  payload: { settings: PomodoroSettings };
+  payload: { settings: AppSettings };
 };
 
 export type WebPushEvent = WebAppDataPush | WebSettingsUpdatedPush;
+
+export type ClipData = {
+  id: string;
+  title: string;
+  availableAt: number;
+  duration: number;
+  channelId: string;
+  lang: string;
+  sources: string[];
+  mentions: string[];
+};

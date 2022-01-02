@@ -4,7 +4,7 @@ import * as Messenger from '@machinat/messenger/components';
 import * as Telegram from '@machinat/telegram/components';
 import * as Line from '@machinat/line/components';
 import encodePostbackData from '../utils/encodePostbackData';
-import { ServerDomain, LineLiffId } from '../interface';
+import { ServerDomain, LineLiffId } from '../constant';
 import { AppActionType, WebviewPath } from '../types';
 
 type ActionButtonData = {

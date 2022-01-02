@@ -1,25 +1,19 @@
 import Machinat from '@machinat/core';
 import { build } from '@machinat/script';
-import { EFFECT, WHILE, PROMPT, RETURN } from '@machinat/script/keywords';
-import ReplyBasicActions from '../components/ReplyBasicActions';
+import * as $ from '@machinat/script/keywords';
+import ReplyActions from '../components/ReplyActions';
 import StartingCard from '../components/StartingCard';
 import currentDayId from '../utils/currentDayId';
-import {
-  ACTION_START,
-  ACTION_PAUSE,
-  ACTION_OK,
-  ACTION_NO,
-  TimingPhase,
-} from '../constant';
+import { ACTION, TimingPhase } from '../constant';
 import type {
-  PomodoroSettings,
-  PomodoroEventContext,
+  AppSettings,
+  AppEventContext,
   AppActionType,
   AppChannel,
 } from '../types';
 
 type StartingParams = {
-  settings: PomodoroSettings;
+  settings: AppSettings;
   phase: TimingPhase;
   remainingTime?: number;
   pomodoroNum: number;
@@ -32,12 +26,12 @@ type StartingVars = StartingParams & {
 };
 
 type StartingReturn = {
-  settings: PomodoroSettings;
+  settings: AppSettings;
   isDayChanged: boolean;
 };
 
 const CHECK_DAY_CHANGE = () => (
-  <EFFECT<StartingVars>
+  <$.EFFECT<StartingVars>
     set={({ vars }) => {
       const dayId = currentDayId(vars.settings.timezone);
       const isDayChanged = dayId !== vars.dayId;
@@ -58,7 +52,7 @@ const CHECK_DAY_CHANGE = () => (
 
 export default build<
   StartingVars,
-  PomodoroEventContext,
+  AppEventContext,
   StartingParams,
   StartingReturn
 >(
@@ -66,32 +60,35 @@ export default build<
     name: 'Starting',
     initVars: (params) => ({
       ...params,
-      action: ACTION_OK,
+      action: ACTION.OK,
       isDayChanged: false,
     }),
   },
   <>
-    <WHILE<StartingVars>
-      condition={({ vars: { action } }) => action !== ACTION_START}
+    <$.WHILE<StartingVars>
+      condition={({ vars: { action } }) => action !== ACTION.START}
     >
       {CHECK_DAY_CHANGE()}
       {({
         channel,
         vars: { action, settings, pomodoroNum, phase, remainingTime },
       }) => {
-        if (action === ACTION_PAUSE) {
+        if (action === ACTION.PAUSE) {
           return <p>It's not timing now 😉</p>;
         }
-        if (action === ACTION_NO) {
+        if (action === ACTION.NO) {
           return <p>OK, tell me when yor're ready</p>;
         }
         return (
-          <ReplyBasicActions
+          <ReplyActions
+            phase={phase}
+            isTiming={false}
             channel={channel as AppChannel}
             action={action}
             settings={settings}
             defaultReply={
               <StartingCard
+                oshi={settings.oshi}
                 settings={settings}
                 pomodoroNum={pomodoroNum}
                 timingPhase={phase}
@@ -102,7 +99,7 @@ export default build<
         );
       }}
 
-      <PROMPT<StartingVars, PomodoroEventContext>
+      <$.PROMPT<StartingVars, AppEventContext>
         key="wait-start"
         set={async ({ vars }, { event, intent }) => {
           return {
@@ -112,17 +109,17 @@ export default build<
                 ? event.payload.settings
                 : vars.settings,
             action:
-              vars.action === ACTION_OK && intent.type === ACTION_OK
-                ? ACTION_START
+              vars.action === ACTION.OK && intent.type === ACTION.OK
+                ? ACTION.START
                 : intent.type,
           };
         }}
       />
 
       {CHECK_DAY_CHANGE()}
-    </WHILE>
+    </$.WHILE>
 
-    <RETURN<StartingVars, StartingReturn>
+    <$.RETURN<StartingVars, StartingReturn>
       value={({ vars: { settings, isDayChanged } }) => ({
         settings,
         isDayChanged,

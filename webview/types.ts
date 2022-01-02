@@ -6,12 +6,15 @@ import type {
   WebPushEvent,
   WebAppData,
   UpdateSettingsAction,
+  UpdateOshiAction,
+  UpdateSubscriptionsAction,
 } from '../src/types';
 
 export type {
-  PomodoroSettings,
+  AppSettings,
   UpdateSettingsAction,
   WebAppData,
+  VtuberData,
 } from '../src/types';
 
 export type WebClient = WebviewClient<
@@ -21,7 +24,12 @@ export type WebClient = WebviewClient<
   WebPushEvent
 >;
 
-export type SendWebActionFn = (action: UpdateSettingsAction) => void;
+export type SendWebActionFn = (
+  action: Omit<
+    UpdateSettingsAction | UpdateOshiAction | UpdateSubscriptionsAction,
+    'category'
+  >
+) => void;
 
 export type PanelPageProps = {
   appData: WebAppData | null;

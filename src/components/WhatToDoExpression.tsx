@@ -2,7 +2,7 @@ import Machinat from '@machinat/core';
 import * as Messenger from '@machinat/messenger/components';
 import * as Telegram from '@machinat/telegram/components';
 import * as Line from '@machinat/line/components';
-import { ACTION_OK, ACTION_CHECK_SETTINGS, ACTION_ABOUT } from '../constant';
+import { ACTION } from '../constant';
 
 const CONTINUE = 'Continue';
 const CHANGE_SETTINGS = 'Change Settings';
@@ -15,12 +15,12 @@ const WhatToDoExpression = ({ children }, { platform }) => {
         <Messenger.Expression
           quickReplies={
             <>
-              <Messenger.TextReply title={CONTINUE} payload={ACTION_OK} />
+              <Messenger.TextReply title={CONTINUE} payload={ACTION.OK} />
               <Messenger.TextReply
                 title={CHANGE_SETTINGS}
-                payload={ACTION_CHECK_SETTINGS}
+                payload={ACTION.CHECK_SETTINGS}
               />
-              <Messenger.TextReply title={WHATS_THIS} payload={ACTION_ABOUT} />
+              <Messenger.TextReply title={WHATS_THIS} payload={ACTION.ABOUT} />
             </>
           }
         >
@@ -33,12 +33,12 @@ const WhatToDoExpression = ({ children }, { platform }) => {
         <Telegram.Expression
           replyMarkup={
             <Telegram.InlineKeyboard>
-              <Telegram.CallbackButton text={CONTINUE} data={ACTION_OK} />
+              <Telegram.CallbackButton text={CONTINUE} data={ACTION.OK} />
               <Telegram.CallbackButton
                 text={CHANGE_SETTINGS}
-                data={ACTION_CHECK_SETTINGS}
+                data={ACTION.CHECK_SETTINGS}
               />
-              <Telegram.CallbackButton text={WHATS_THIS} data={ACTION_ABOUT} />
+              <Telegram.CallbackButton text={WHATS_THIS} data={ACTION.ABOUT} />
             </Telegram.InlineKeyboard>
           }
         >
@@ -55,21 +55,21 @@ const WhatToDoExpression = ({ children }, { platform }) => {
                 <Line.PostbackAction
                   label={CONTINUE}
                   displayText={CONTINUE}
-                  data={ACTION_OK}
+                  data={ACTION.OK}
                 />
               </Line.QuickReply>
               <Line.QuickReply>
                 <Line.PostbackAction
                   label={CHANGE_SETTINGS}
                   displayText={CHANGE_SETTINGS}
-                  data={ACTION_CHECK_SETTINGS}
+                  data={ACTION.CHECK_SETTINGS}
                 />
               </Line.QuickReply>
               <Line.QuickReply>
                 <Line.PostbackAction
                   label={WHATS_THIS}
                   displayText={WHATS_THIS}
-                  data={ACTION_ABOUT}
+                  data={ACTION.ABOUT}
                 />
               </Line.QuickReply>
             </>

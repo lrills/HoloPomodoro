@@ -1,52 +1,24 @@
 import { makeFactoryProvider } from '@machinat/core/service';
 import DialogFlow from '@machinat/dialogflow';
-import { MessengerEvent } from '@machinat/messenger';
-import { TelegramEvent } from '@machinat/telegram';
-import { LineEvent } from '@machinat/line';
 import decodePostbackData from '../utils/decodePostbackData';
-import {
-  ACTION_OK,
-  ACTION_TIME_UP,
-  ACTION_UNKNOWN,
-  ACTION_SETTINGS_UPDATED,
-} from '../constant';
-import {
-  AppActionType,
-  AppTimeUpEvent,
-  AppSettingsUpdatedEvent,
-  AppEventIntent,
-} from '../types';
+import { ACTION } from '../constant';
+import { ChatEventContext, AppEventIntent, AppActionType } from '../types';
 
 const useIntent =
   (recognizer: DialogFlow.IntentRecognizer) =>
-  async (
-    event:
-      | MessengerEvent
-      | TelegramEvent
-      | LineEvent
-      | AppTimeUpEvent
-      | AppSettingsUpdatedEvent
-  ): Promise<AppEventIntent> => {
-    if (event.type === 'time_up') {
-      return { type: ACTION_TIME_UP, confidence: 1, payload: null };
-    }
-
-    if (event.type === 'settings_updated') {
-      return { type: ACTION_SETTINGS_UPDATED, confidence: 1, payload: null };
-    }
-
+  async (event: ChatEventContext['event']): Promise<AppEventIntent> => {
     if (
       event.platform === 'messenger' &&
       event.category === 'message' &&
       event.type === 'image' &&
       event.stickerId === 369239263222822
     ) {
-      return { type: ACTION_OK, confidence: 1, payload: null };
+      return { type: ACTION.OK, confidence: 1, payload: null };
     }
 
     if (event.type === 'text') {
       if (event.text === '👍' || event.text === '👌') {
-        return { type: ACTION_OK, confidence: 1, payload: null };
+        return { type: ACTION.OK, confidence: 1, payload: null };
       }
 
       const { type, confidence, payload } = await recognizer.detectText(
@@ -54,7 +26,7 @@ const useIntent =
         event.text
       );
       return {
-        type: (type as AppActionType) || ACTION_UNKNOWN,
+        type: (type as AppActionType) || ACTION.UNKNOWN,
         confidence,
         payload,
       };
@@ -76,7 +48,7 @@ const useIntent =
       }
     }
 
-    return { type: ACTION_UNKNOWN, confidence: 0, payload: null };
+    return { type: ACTION.UNKNOWN, confidence: 0, payload: null };
   };
 
 export default makeFactoryProvider({

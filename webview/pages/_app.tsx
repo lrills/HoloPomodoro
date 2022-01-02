@@ -25,14 +25,18 @@ const client: WebClient = new WebviewClient({
 client.onError(console.error);
 
 const sendAction: SendWebActionFn = (action) => {
-  client.send(action);
+  client.send({ category: 'app', ...action });
 };
 
 const closeWebview = () => client.closeWebview();
 
 const PomodoroApp = ({ Component, pageProps }) => {
   React.useEffect(() => {
-    client.send({ category: 'app', type: 'get_data', payload: null });
+    client.send({
+      category: 'app',
+      type: 'fetch_data',
+      payload: { timezone: -(new Date().getTimezoneOffset() / 60) },
+    });
   }, []);
 
   const appData = useEventReducer<WebAppData | null, WebClient>(
