@@ -1,9 +1,11 @@
 import React from 'react';
+import Link from 'next/link';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import clipLanguages from '../../clipLanguages.json';
 import AppFrame from '../components/AppFrame';
@@ -11,6 +13,11 @@ import NummericSetting from '../components/NummericSetting';
 import UpdateBar from '../components/UpdateBar';
 import getVtuber from '../utils/getVtuber';
 import { AppSettings, PanelPageProps } from '../types';
+
+const displayVtuber = (id?: null | string) => {
+  const vtuber = getVtuber(id);
+  return vtuber ? `${vtuber.englishName}${vtuber.oshiIcon}` : '';
+};
 
 const SettingsPanel = ({
   appData,
@@ -75,7 +82,7 @@ const SettingsPanel = ({
               value={displayedSettings?.workingMins || 1}
               disabled={!settings || isUpdating}
               onChange={handleSettingChange('workingMins')}
-              min={1}
+              min={5}
               max={60}
               step={5}
               unit="min"
@@ -86,8 +93,8 @@ const SettingsPanel = ({
               value={displayedSettings?.shortBreakMins || 1}
               disabled={!settings || isUpdating}
               onChange={handleSettingChange('shortBreakMins')}
-              min={1}
-              max={20}
+              min={5}
+              max={30}
               step={5}
               unit="min"
             />
@@ -97,7 +104,7 @@ const SettingsPanel = ({
               value={displayedSettings?.longBreakMins || 1}
               disabled={!settings || isUpdating}
               onChange={handleSettingChange('longBreakMins')}
-              min={1}
+              min={5}
               max={60}
               step={5}
               unit="min"
@@ -129,6 +136,7 @@ const SettingsPanel = ({
                 const labelId = `clip-language-${code}`;
                 return (
                   <FormControlLabel
+                    key={labelId}
                     control={
                       <Checkbox
                         checked={!!langOptions[code]}
@@ -152,6 +160,42 @@ const SettingsPanel = ({
                   />
                 );
               })}
+            </Stack>
+
+            <Stack spacing={1}>
+              <Typography gutterBottom>Favorite VTuber</Typography>
+              <div style={{ paddingLeft: '10px' }}>
+                <i>{displayVtuber(settings?.oshi)}</i>
+              </div>
+              <Link href="/oshi" passHref>
+                <Button
+                  variant="contained"
+                  sx={{ width: '50px' }}
+                  component="a"
+                >
+                  Edit
+                </Button>
+              </Link>
+            </Stack>
+
+            <Stack spacing={1}>
+              <Typography gutterBottom>Subscriptions</Typography>
+              <div style={{ paddingLeft: '10px' }}>
+                <i>
+                  {settings?.subscriptions
+                    .map((id) => displayVtuber(id))
+                    .join(', ')}
+                </i>
+              </div>
+              <Link href={'/subscriptions'} passHref>
+                <Button
+                  variant="contained"
+                  sx={{ width: '50px' }}
+                  component="a"
+                >
+                  Edit
+                </Button>
+              </Link>
             </Stack>
           </Stack>
           <UpdateBar

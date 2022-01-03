@@ -79,7 +79,7 @@ export default build<
       const { oshi, subscriptions } = settings;
       const vtuber = getVtuber(oshi);
       return subscriptions.length === 0 ? (
-        <p>You can tell me to "subscribe" anytime {vtuber?.lang.postfix}</p>
+        <p>You can tell me to "subscribe" anytime {vtuber?.lang.positiveEnd}</p>
       ) : vtuber && !subscriptions.includes(vtuber.id) ? (
         <p>
           I can't believe you don't choose {vtuber?.lang.selfCall || 'me'} 😭
@@ -87,26 +87,22 @@ export default build<
       ) : subscriptions.length === 1 ? (
         <p>
           Thanks for choosing only {vtuber?.lang.selfCall || 'me'}{' '}
-          {vtuber?.lang.postfix} 😉
+          {vtuber?.lang.positiveEnd} 😉
         </p>
       ) : subscriptions.length > 10 ? (
-        <p>You choose so many girls {vtuber?.lang.postfix} 😡</p>
+        <p>You choose so many girls {vtuber?.lang.positiveEnd} 😡</p>
       ) : (
-        <p>I see who you like {vtuber?.lang.postfix} 😏</p>
+        <p>I see who you like {vtuber?.lang.positiveEnd} 😏</p>
       );
     }}
 
     {({ vars }) => (
-      <>
-        <p>Please confirm your settings ⚙️</p>
-        <Pause />
-        <SettingsCard
-          settings={vars.settings}
-          noTitle
-          withEditButton
-          withOkButton
-        />
-      </>
+      <SettingsCard
+        title="Please confirm your settings ⚙️"
+        settings={vars.settings}
+        withEditButton
+        withOkButton
+      />
     )}
 
     <$.PROMPT<BeginningVars, AppEventContext>
@@ -122,18 +118,23 @@ export default build<
     />
 
     {({ vars: { action, settings } }) => {
+      const vtuber = getVtuber(settings.oshi);
       const isUpdated = action === ACTION.SETTINGS_UPDATED;
       return (
         <>
           {isUpdated && (
             <>
-              <p>Settings updated ⚙️</p>
-              <SettingsCard settings={settings} noTitle />
+              <SettingsCard isChanged settings={settings} />
               <Pause />
             </>
           )}
+          {vtuber && (
+            <p>
+              I'll give you a {vtuber.pomodoroIcon} every working time{' '}
+              {vtuber.lang.positiveEnd}
+            </p>
+          )}
           <Pause />
-          <p>👍 Let's begin!</p>
         </>
       );
     }}

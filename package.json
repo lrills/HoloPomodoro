@@ -2,7 +2,7 @@
   "name": "holo-pomodoro",
   "private": true,
   "scripts": {
-    "clean": "rm -rf ./lib",
+    "clean": "rm -rf ./lib ./dist",
     "migrate": "per-env",
     "migrate:development": "dotenv -- ts-node ./src/cli/migrate.ts",
     "migrate:production": "node ./lib/cli/migrate.js",
@@ -31,7 +31,7 @@
     "@machinat/redis-state": "^0.5.0-beta.16",
     "@machinat/script": "^0.5.0-beta.19",
     "@machinat/stream": "^0.5.0-beta.14",
-    "@machinat/telegram": "^0.5.0-beta.15",
+    "@machinat/telegram": "^0.5.0-beta.21",
     "@machinat/webview": "^0.5.0-beta.15",
     "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.0.0",

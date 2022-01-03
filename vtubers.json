@@ -16,7 +16,7 @@
     "lang": {
       "selfCall": "Pekora",
       "nickname": "Pekora",
-      "postfix": "peko",
+      "positiveEnd": "peko",
       "hello": "Hiya-peko",
       "greeting": "Konpeko, konpeko, konpeko!",
       "introduction": "I'm Usada Pekora, peko!",
@@ -38,11 +38,11 @@
       "secondary": "#ffe0f1"
     },
     "lang": {
-      "selfCall": "Miko",
-      "nickname": "Mikochi",
-      "postfix": "nye~",
+      "selfCall": "Mikochi",
+      "nickname": "Miko",
+      "positiveEnd": "nye~",
       "hello": "Nya-hello",
-      "greeting": "Nya-hello~!",
+      "greeting": "Nya-hello~~!",
       "introduction": "Sakura Miko da yo~!",
       "otsukare": "Otsumiko",
       "fanName": "35p"

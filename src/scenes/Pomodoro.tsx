@@ -20,6 +20,7 @@ type PomodoroVars = PomodoroParams & {
   registerTimerAt: Date;
   shouldSaveTz: boolean;
   pomodoroRecord: null | [Date, Date];
+  isFirstTime: boolean;
 };
 
 export default build<
@@ -40,6 +41,7 @@ export default build<
       dayId: currentDayId(0),
       shouldSaveTz: false,
       pomodoroRecord: null,
+      isFirstTime: true,
     }),
   },
   <$.BLOCK<PomodoroVars>>
@@ -70,7 +72,6 @@ export default build<
               ),
             };
           }
-
           return {
             ...vars,
             settings,
@@ -88,6 +89,7 @@ export default build<
       />
 
       <$.EFFECT<PomodoroVars, AppScriptYield>
+        set={({ vars }) => ({ ...vars, isFirstTime: false })}
         yield={({ vars }, prev) => ({
           ...prev,
           registerTimer: vars.registerTimerAt,

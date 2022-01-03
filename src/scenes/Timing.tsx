@@ -1,8 +1,7 @@
 import Machinat from '@machinat/core';
 import { build } from '@machinat/script';
 import * as $ from '@machinat/script/keywords';
-import StartTiming from '../components/StartTiming';
-import TimingCard from '../components/TimingCard';
+import ReplyTiming from '../components/ReplyTiming';
 import StopingCard from '../components/StopingCard';
 import ReplyActions from '../components/ReplyActions';
 import EndTiming from '../components/EndTiming';
@@ -67,36 +66,26 @@ export default build<TimingVars, AppEventContext, TimingParams, TimingReturn>(
         time > Date.now() - beginAt.getTime()
       }
     >
-      {async ({ channel, vars }) =>
-        vars.isBeginning ? (
-          <StartTiming
-            phase={vars.phase}
-            settings={vars.settings}
-            channel={channel as AppChannel}
-            timingPhase={vars.phase}
-            pomodoroNum={vars.pomodoroNum}
-            remainingTime={vars.time - (Date.now() - vars.beginAt.getTime())}
-          />
-        ) : (
-          <ReplyActions
-            phase={vars.phase}
-            isTiming={false}
-            channel={channel as AppChannel}
-            action={vars.action}
-            settings={vars.settings}
-            defaultReply={
-              <TimingCard
-                oshi={vars.settings.oshi}
-                timingPhase={vars.phase}
-                pomodoroNum={vars.pomodoroNum}
-                remainingTime={
-                  vars.time - (Date.now() - vars.beginAt.getTime())
-                }
-              />
-            }
-          />
-        )
-      }
+      {({ channel, vars }) => (
+        <ReplyActions
+          phase={vars.phase}
+          isTiming={true}
+          channel={channel as AppChannel}
+          action={vars.action}
+          settings={vars.settings}
+          defaultReply={
+            <ReplyTiming
+              isBeginning={vars.isBeginning}
+              phase={vars.phase}
+              settings={vars.settings}
+              channel={channel as AppChannel}
+              timingPhase={vars.phase}
+              pomodoroNum={vars.pomodoroNum}
+              remainingTime={vars.time - (Date.now() - vars.beginAt.getTime())}
+            />
+          }
+        />
+      )}
       <$.EFFECT<TimingVars>
         set={({ vars }) => ({ ...vars, isBeginning: false })}
       />

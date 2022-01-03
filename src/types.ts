@@ -20,7 +20,7 @@ export type LanguageConfig = {
   selfCall: undefined | string;
   nickname: string;
   introduction: undefined | string;
-  postfix: undefined | string;
+  positiveEnd: undefined | string;
   hello: string;
   greeting: string;
   otsukare: undefined | string;
@@ -94,7 +94,7 @@ export type TimeUpEvent = {
 export type SettingsUpdatedEvent = {
   platform: 'messenger' | 'telegram' | 'line';
   category: 'app';
-  type: 'settings_updated' | 'oshi_updated' | 'subscriptions_updated';
+  type: 'settings_updated';
   payload: { settings: AppSettings };
   user: AppUser;
   channel: AppChannel;

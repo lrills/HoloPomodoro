@@ -24,14 +24,13 @@ export type ButtonData = ActionButtonData | WebviewButtonData;
 type ButtonsCardProps = {
   children: MachinatNode;
   buttons: ButtonData[];
-  makeLineAltText: (template: Record<string, unknown>) => string;
 };
 
 const encodeActionType = (type) => encodePostbackData({ action: type });
 
 const ButtonsCard =
   (domain: string, liffId: string) =>
-  ({ children, buttons, makeLineAltText }: ButtonsCardProps, { platform }) => {
+  ({ children, buttons }: ButtonsCardProps, { platform }) => {
     switch (platform) {
       case 'messenger':
         return (
@@ -86,7 +85,7 @@ const ButtonsCard =
       case 'line':
         return (
           <Line.ButtonTemplate
-            altText={makeLineAltText}
+            altText={(template) => template.text}
             actions={buttons.map((button) =>
               button.type === 'action' ? (
                 <Line.PostbackAction

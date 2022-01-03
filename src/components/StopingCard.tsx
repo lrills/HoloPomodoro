@@ -13,7 +13,6 @@ const StopingCard = ({ children }: StopingCardProps) => {
         { text: 'Yes', type: ACTION.OK },
         { text: 'No', type: ACTION.NO },
       ]}
-      makeLineAltText={(template) => template.text as string}
     >
       {children}
     </ActionsCard>

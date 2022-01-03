@@ -15,6 +15,7 @@ export const ACTION = {
   PAUSE: 'pause' as const,
   SKIP: 'skip' as const,
   CHECK_SETTINGS: 'settings' as const,
+  CHECK_SUBSCRIPTIONS: 'subscriptions' as const,
   CHECK_STATISTICS: 'statistics' as const,
   GET_CLIP: 'clip' as const,
   ABOUT: 'about' as const,

@@ -13,7 +13,6 @@ type ActionButtonData = {
 type ActionsCardProps = {
   children: MachinatNode;
   actions: ActionButtonData[];
-  makeLineAltText: (template: Record<string, unknown>) => string;
 };
 
 const encodeActionType = (type) => encodePostbackData({ action: type });
@@ -22,10 +21,7 @@ const encodeActionType = (type) => encodePostbackData({ action: type });
  * This component use ReplyKeyboard in Telegram. If you don't need it, use the
  * ButtonsCard component.
  */
-const ActionsCard = (
-  { children, actions, makeLineAltText }: ActionsCardProps,
-  { platform }
-) => {
+const ActionsCard = ({ children, actions }: ActionsCardProps, { platform }) => {
   switch (platform) {
     case 'messenger':
       return (
@@ -61,7 +57,7 @@ const ActionsCard = (
     case 'line':
       return (
         <Line.ButtonTemplate
-          altText={makeLineAltText}
+          altText={(template) => template.text}
           actions={actions.map((action) => (
             <Line.PostbackAction
               label={action.text}

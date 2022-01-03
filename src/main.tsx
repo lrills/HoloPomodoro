@@ -108,7 +108,7 @@ const main = (
               event: {
                 platform: auth.platform,
                 category: 'app',
-                type: 'oshi_updated',
+                type: 'settings_updated',
                 payload: { settings },
                 channel: auth.channel,
                 user: auth.user,
@@ -147,7 +147,7 @@ const main = (
               event: {
                 platform: auth.platform,
                 category: 'app',
-                type: 'subscriptions_updated',
+                type: 'settings_updated',
                 payload: { settings },
                 channel: auth.channel,
                 user: auth.user,

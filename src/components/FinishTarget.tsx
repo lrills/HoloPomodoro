@@ -14,7 +14,6 @@ const FinishTarget = ({ oshi }: FinishTargetProps) => {
     <>
       <p>{getVtuber(oshi)?.lang.otsukare || 'Congratulation'} 🎉</p>
       <ButtonsCard
-        makeLineAltText={(template) => `${template.text}`}
         buttons={[
           {
             type: 'webview',

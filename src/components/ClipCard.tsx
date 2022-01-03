@@ -29,9 +29,12 @@ const ClipCard = (
   const imageUrl = `https://i.ytimg.com/vi/${id}/sddefault.jpg`;
   const clipDuration = formatDuration(duration);
   const moreActionData = encodePostbackData({ action: 'clip' });
+  const youtubeLabel = 'Watch 📺';
 
   if (platform === 'messenger') {
-    const ytButton = <Messenger.UrlButton title="Watch 📺" url={youtubeUrl} />;
+    const ytButton = (
+      <Messenger.UrlButton title={youtubeLabel} url={youtubeUrl} />
+    );
     return (
       <Messenger.GenericTemplate imageAspectRatio="horizontal">
         <Messenger.GenericItem
@@ -70,7 +73,7 @@ const ClipCard = (
           withYoutubeButton || withMoreButton ? (
             <Telegram.InlineKeyboard>
               {withYoutubeButton && (
-                <Telegram.UrlButton text="Watch 📺" url={youtubeUrl} />
+                <Telegram.UrlButton text={youtubeLabel} url={youtubeUrl} />
               )}
               {withMoreButton && (
                 <Telegram.CallbackButton text="More 📼" data={moreActionData} />
@@ -91,7 +94,7 @@ const ClipCard = (
         actions={
           <>
             {withYoutubeButton && (
-              <Line.UriAction label="Watch 📺" uri={youtubeUrl} />
+              <Line.UriAction label={youtubeLabel} uri={youtubeUrl} />
             )}
             <Line.PostbackAction label="More 📼" data={moreActionData} />
           </>

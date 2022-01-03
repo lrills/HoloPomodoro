@@ -24,11 +24,11 @@ const EndTiming = ({
       <p>
         Break time{' '}
         {action === ACTION.PAUSE
-          ? 'paused'
+          ? 'is paused'
           : action === ACTION.SKIP
-          ? 'skipped'
+          ? 'is skipped'
           : 'is up'}{' '}
-        {getVtuber(settings.oshi)?.lang.postfix}
+        {getVtuber(settings.oshi)?.lang.positiveEnd}
       </p>
     );
   }
@@ -41,11 +41,11 @@ const EndTiming = ({
     <p>
       {ordinal(pomodoroNum)} <PomodoroIcon oshi={settings.oshi} />{' '}
       {action === ACTION.PAUSE
-        ? 'paused'
+        ? 'is paused'
         : action === ACTION.SKIP
-        ? 'skipped'
-        : 'finished'}{' '}
-      {getVtuber(settings.oshi)?.lang.postfix}
+        ? 'is skipped'
+        : 'is finished'}{' '}
+      {getVtuber(settings.oshi)?.lang.positiveEnd}
     </p>
   );
 };

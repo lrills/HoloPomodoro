@@ -1,9 +1,8 @@
 import Machinat from '@machinat/core';
 import { build } from '@machinat/script';
 import * as $ from '@machinat/script/keywords';
-import VtuberCard from '../components/VtuberCard';
+import VtuberDebut from '../components/VtuberDebut';
 import ButtonsCard from '../components/ButtonsCard';
-import Pause from '../components/Pause';
 import getVtuber from '../utils/getVtuber';
 import type { AppEventContext, AppActionType, AppSettings } from '../types';
 
@@ -36,27 +35,10 @@ export default build<
       {({ vars: { settings, action } }) => {
         const vtuber = getVtuber(settings.oshi);
         return vtuber && action === 'oshi_updated' ? (
-          <>
-            <p>{vtuber.lang.greeting}</p>
-            <Pause />
-
-            <VtuberCard id={vtuber.id} />
-            <Pause />
-
-            <ButtonsCard
-              makeLineAltText={() => 'Select a VTuber'}
-              buttons={[
-                { type: 'webview', path: 'oshi', text: 'Change 📺' },
-                { type: 'action', action: 'ok', text: 'Go 👍' },
-              ]}
-            >
-              {vtuber.lang.introduction || `Let's go, ${vtuber.lang.fanName}`}
-            </ButtonsCard>
-          </>
+          <VtuberDebut id={vtuber.id} withOkButton />
         ) : (
           <ButtonsCard
-            makeLineAltText={() => 'Select a VTuber'}
-            buttons={[{ type: 'webview', path: 'oshi', text: 'Select 📺' }]}
+            buttons={[{ type: 'webview', path: 'oshi', text: 'Select 🙋' }]}
           >
             Please select your favorite VTuber 👇
           </ButtonsCard>
@@ -66,7 +48,7 @@ export default build<
       <$.PROMPT<SelectOshiVars, AppEventContext>
         key="ask-oshi"
         set={({ vars }, { event, intent }) => {
-          if (event.type === 'oshi_updated') {
+          if (event.type === 'settings_updated') {
             return {
               ...vars,
               settings: event.payload.settings,
@@ -94,7 +76,7 @@ export default build<
               if (intent.type === 'ok') {
                 return { ...vars, isConfirmed: true };
               }
-              if (event.type === 'oshi_updated') {
+              if (event.type === 'settings_updated') {
                 return {
                   ...vars,
                   settings: event.payload.settings,

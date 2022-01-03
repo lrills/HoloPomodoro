@@ -101,7 +101,7 @@ type VtuberMenuProp = {
   selected: Set<string>;
   disabled: boolean;
   handleChange: (id: string, changing: boolean) => void;
-  oshi: undefined |null| string;
+  oshi: undefined | null | string;
 };
 
 const VtuberMenu = ({

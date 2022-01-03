@@ -31,8 +31,12 @@ export default build<
   },
   <$.BLOCK<SelectSubscriptionsVars>>
     {({ vars }) => {
-      const vtuber = getVtuber(vars.settings.oshi);
-      return <p>I'll send you a clip at break {vtuber?.lang.postfix}</p>;
+      return (
+        <p>
+          I'll send you a clip at break{' '}
+          {getVtuber(vars.settings.oshi)?.lang.positiveEnd}
+        </p>
+      );
     }}
 
     <$.WHILE<SelectSubscriptionsVars>
@@ -40,24 +44,23 @@ export default build<
     >
       {({ vars: { settings, action } }) => {
         const { subscriptions } = settings;
+
         return subscriptions.length === 0 ? (
           <ButtonsCard
-            makeLineAltText={() => 'Select a VTuber'}
             buttons={[
-              { type: 'webview', path: 'subscriptions', text: 'Subscribe 📺' },
+              { type: 'webview', path: 'subscriptions', text: 'Subscribe 💑' },
               { type: 'action', action: 'ok', text: 'Ok 👌' },
             ]}
           >
             You don't subscribe to any VTuber. Do you want to continue?
           </ButtonsCard>
         ) : action === 'subscriptions_updated' ? (
-          <SubscriptionsCard subscriptions={subscriptions} withOkButton />
+          <SubscriptionsCard isChanged settings={settings} withOkButton />
         ) : (
           <ButtonsCard
-            makeLineAltText={() => 'Select a VTuber'}
             buttons={[
               { type: 'action', action: 'ok', text: 'Only you ❤️' },
-              { type: 'webview', path: 'subscriptions', text: 'Subscribe 📺' },
+              { type: 'webview', path: 'subscriptions', text: 'Subscribe 💑' },
             ]}
           >
             You can subscribe more VTubers here 👇
@@ -68,7 +71,7 @@ export default build<
       <$.PROMPT<SelectSubscriptionsVars, AppEventContext>
         key="ask-subscriptions"
         set={({ vars }, { event, intent }) => {
-          if (event.type === 'subscriptions_updated') {
+          if (event.type === 'settings_updated') {
             return {
               ...vars,
               settings: event.payload.settings,
@@ -80,7 +83,6 @@ export default build<
             action: intent.type,
             isConfirmed:
               intent.type === 'ok' ||
-              intent.type === 'no' ||
               intent.type === 'skip' ||
               intent.type === 'start',
           };

@@ -8,7 +8,9 @@ import type { AppActionType, AppSettings, AppChannel } from '../types';
 import About from './About';
 import ButtonsCard from './ButtonsCard';
 import SettingsCard from './SettingsCard';
+import SubscriptionsCard from './SubscriptionsCard';
 import StatisticsCard from './StatisticsCard';
+import VtuberDebut from './VtuberDebut';
 import ClipCard from './ClipCard';
 
 type ReplyActionsProps = {
@@ -30,18 +32,38 @@ export default makeContainer({ deps: [useAppData, useClip] as const })(
       channel,
       defaultReply = null,
     }: ReplyActionsProps) => {
+      const vtuber = getVtuber(settings.oshi);
       if (action === ACTION.ABOUT) {
         return <About />;
       }
-      if (action === ACTION.CHECK_SETTINGS) {
-        return <SettingsCard withEditButton settings={settings} />;
-      }
-      if (action === ACTION.SETTINGS_UPDATED) {
+      if (
+        action === ACTION.CHECK_SETTINGS ||
+        action === ACTION.SETTINGS_UPDATED
+      ) {
         return (
-          <>
-            <p>Your settings is updated ⚙️</p>
-            <SettingsCard noTitle withEditButton settings={settings} />
-          </>
+          <SettingsCard
+            withEditButton
+            isChanged={action === ACTION.SETTINGS_UPDATED}
+            settings={settings}
+          />
+        );
+      }
+      if (
+        action === ACTION.CHECK_SUBSCRIPTIONS ||
+        action === ACTION.SUBSCRIPTIONS_UPDATED
+      ) {
+        return (
+          <SubscriptionsCard
+            isChanged={action === ACTION.SUBSCRIPTIONS_UPDATED}
+            settings={settings}
+          />
+        );
+      }
+      if (action === ACTION.OSHI_UPDATED) {
+        return vtuber ? (
+          <VtuberDebut id={vtuber.id} withTwitterButton withYoutubeButton />
+        ) : (
+          <p>No favorite VTuber is selected. You can select one in the menu</p>
         );
       }
       if (action === ACTION.CHECK_STATISTICS) {
@@ -56,8 +78,7 @@ export default makeContainer({ deps: [useAppData, useClip] as const })(
       }
       if (action === ACTION.GET_CLIP) {
         if (isTiming && phase === TimingPhase.Working) {
-          const vtuber = getVtuber(settings.oshi);
-          return <p>You should focus right now {vtuber?.lang.postfix}</p>;
+          return <p>You should focus right now {vtuber?.lang.positiveEnd}</p>;
         }
 
         const clip = await fetchClip(
@@ -72,12 +93,11 @@ export default makeContainer({ deps: [useAppData, useClip] as const })(
         if (!clip) {
           return (
             <ButtonsCard
-              makeLineAltText={(template) => template.text as string}
               buttons={[
                 {
                   type: 'webview',
                   path: WEBVIEW_PATH.SUBSCRIPTIONS,
-                  text: 'Subscribe 📺',
+                  text: 'Subscribe 💑',
                 },
               ]}
             >

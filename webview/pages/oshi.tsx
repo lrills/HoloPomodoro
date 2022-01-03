@@ -19,6 +19,7 @@ const SettingsPanel = ({
     setSelectedOshi(currentOshi);
     if (isUpdating) {
       setUpdating(false);
+      closeWebview();
     }
   }, [appData]);
 
@@ -50,7 +51,6 @@ const SettingsPanel = ({
               type: 'update_oshi',
               payload: { oshi: selectedOshi || null },
             });
-            closeWebview();
           }}
         />
       </Container>

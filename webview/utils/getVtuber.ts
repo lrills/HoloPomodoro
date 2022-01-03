@@ -6,12 +6,14 @@ const vtubersMap = new Map(
   (vtubers as VtuberData[]).map((vtuber) => [vtuber.id, vtuber])
 );
 
-const getVtuber = (id: undefined| null | string): null | VtuberData => {
+function getVtubers(id: string): VtuberData;
+function getVtubers(id: undefined | null | string): null | VtuberData;
+function getVtubers(id: undefined | null | string): null | VtuberData {
   if (!id) {
     return null;
   }
   const vtuber = vtubersMap.get(id);
   return vtuber || null;
-};
+}
 
-export default getVtuber;
+export default getVtubers;

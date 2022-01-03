@@ -2,7 +2,8 @@ import Machinat from '@machinat/core';
 import { build } from '@machinat/script';
 import * as $ from '@machinat/script/keywords';
 import ReplyActions from '../components/ReplyActions';
-import StartingCard from '../components/StartingCard';
+import AskStarting from '../components/AskStarting';
+import PomodoroIcon from '../components/PomodoroIcon';
 import currentDayId from '../utils/currentDayId';
 import { ACTION, TimingPhase } from '../constant';
 import type {
@@ -13,6 +14,7 @@ import type {
 } from '../types';
 
 type StartingParams = {
+  isFirstTime: boolean;
   settings: AppSettings;
   phase: TimingPhase;
   remainingTime?: number;
@@ -22,6 +24,7 @@ type StartingParams = {
 
 type StartingVars = StartingParams & {
   action: AppActionType;
+  isBeginning: boolean;
   isDayChanged: boolean;
 };
 
@@ -38,13 +41,16 @@ const CHECK_DAY_CHANGE = () => (
       if (!isDayChanged) {
         return vars;
       }
+
       return {
         ...vars,
         dayId,
+        action: vars.action === ACTION.START ? ACTION.OK : vars.action,
         isDayChanged: true,
         pomodoroNum: 1,
         phase: TimingPhase.Working,
         remainingTime: undefined,
+        isBeginning: true,
       };
     }}
   />
@@ -61,43 +67,60 @@ export default build<
     initVars: (params) => ({
       ...params,
       action: ACTION.OK,
+      isBeginning: true,
       isDayChanged: false,
     }),
   },
   <>
+    {CHECK_DAY_CHANGE()}
+
     <$.WHILE<StartingVars>
       condition={({ vars: { action } }) => action !== ACTION.START}
     >
-      {CHECK_DAY_CHANGE()}
-      {({
-        channel,
-        vars: { action, settings, pomodoroNum, phase, remainingTime },
-      }) => {
-        if (action === ACTION.PAUSE) {
+      {({ platform, channel, vars }) => {
+        if (vars.action === ACTION.PAUSE) {
           return <p>It's not timing now 😉</p>;
         }
-        if (action === ACTION.NO) {
-          return <p>OK, tell me when yor're ready</p>;
+        if (vars.action === ACTION.NO) {
+          return <p>Ok, tell me when yor're ready</p>;
         }
         return (
           <ReplyActions
-            phase={phase}
+            phase={vars.phase}
             isTiming={false}
             channel={channel as AppChannel}
-            action={action}
-            settings={settings}
+            action={vars.action}
+            settings={vars.settings}
             defaultReply={
-              <StartingCard
-                oshi={settings.oshi}
-                settings={settings}
-                pomodoroNum={pomodoroNum}
-                timingPhase={phase}
-                remainingTime={remainingTime}
-              />
+              <AskStarting
+                withGreeting={
+                  !vars.isFirstTime &&
+                  vars.isBeginning &&
+                  vars.pomodoroNum === 1 &&
+                  vars.phase === TimingPhase.Working
+                }
+                settings={vars.settings}
+                pomodoroNum={vars.pomodoroNum}
+                timingPhase={vars.phase}
+                remainingTime={vars.remainingTime}
+              >
+                {vars.isFirstTime &&
+                  (platform === 'telegram' ? (
+                    <>Press the "Start ▶️" button to get started 👇</>
+                  ) : (
+                    <>
+                      Let's start your first{' '}
+                      <PomodoroIcon oshi={vars.settings.oshi} />
+                    </>
+                  ))}
+              </AskStarting>
             }
           />
         );
       }}
+      <$.EFFECT<StartingVars>
+        set={({ vars }) => ({ ...vars, isBeginning: false })}
+      />
 
       <$.PROMPT<StartingVars, AppEventContext>
         key="wait-start"

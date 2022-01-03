@@ -28,25 +28,20 @@ const StatisticsCard = ({
       ? ((recentSum * 100) / (recentDays * settings.pomodoroPerDay)).toFixed()
       : '-';
 
-  const settingsDesc = (
-    <>
-      {noTitle && '📜 Records:\n'}
-      ‣ Today's <PomodoroIcon oshi={oshi} />: {records.length}
-      <br />
-      ‣ Avg. <PomodoroIcon oshi={oshi} />: {recentAvg}
-      <br />‣ Finish Rate: {finishRate}%
-    </>
-  );
-
   return (
-    <ButtonsCard
-      makeLineAltText={(template) => `${template.text}`}
-      buttons={[
-        { type: 'webview', text: 'More 📊', path: WEBVIEW_PATH.STATISTICS },
-      ]}
-    >
-      {settingsDesc}
-    </ButtonsCard>
+    <>
+      {noTitle ? null : <p>📜 Records:</p>}
+      <ButtonsCard
+        buttons={[
+          { type: 'webview', text: 'More 📊', path: WEBVIEW_PATH.STATISTICS },
+        ]}
+      >
+        ‣ Today's <PomodoroIcon oshi={oshi} />: {records.length}
+        <br />
+        ‣ Avg. <PomodoroIcon oshi={oshi} />: {recentAvg}
+        <br />‣ Finish Rate: {finishRate}%
+      </ButtonsCard>
+    </>
   );
 };
 

@@ -47,7 +47,7 @@ export const up = makeContainer({
           },
           {
             type: 'web_url',
-            title: '📺 Subscriptions',
+            title: '💑 Subscriptions',
             url: `${ENTRY_URL}/webview/${WEBVIEW_PATH.SUBSCRIPTIONS}?platform=messenger`,
             webview_height_ratio: 'full',
             messenger_extensions: true,
@@ -95,7 +95,7 @@ export const up = makeContainer({
   await telegramBot.makeApiCall('setMyCommands', {
     commands: [
       { command: 'clip', description: '📼 Watch a Clip' },
-      { command: 'subscriptions', description: '📺 Subscriptions' },
+      { command: 'subscriptions', description: '💑 Subscriptions' },
       { command: 'statistics', description: '📊 Statistics' },
       { command: 'settings', description: '⚙️ Settings' },
     ],
