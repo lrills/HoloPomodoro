@@ -28,7 +28,7 @@ export const up = makeContainer({
     greeting: [
       {
         locale: 'default',
-        text: '🍅 Pomodoro Bot 🤖',
+        text: '▶️ HoloPomodoro 🍅 Bot 🤖',
       },
     ],
   });

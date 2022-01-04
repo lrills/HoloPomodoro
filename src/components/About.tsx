@@ -3,13 +3,13 @@ import WhatToDoExpression from './WhatToDoExpression';
 
 const About = () => (
   <WhatToDoExpression>
-    I'm a timing bot 🤖 for Pomodoro Technique 🍅
+    I'm a fan made 🍅 Pomodoro Bot 🤖 that send you VTubers clips at the break ▶️
     <br />
-    This App is an example of Machinat Chat Framework.
+    All the media you found here is owned by original author.
     <br />
-    Check the source code here:
+    Check the source code to learn more:
     <br />
-    https://github.com/machinat/pomodoro-example
+    https://github.com/lrills/holo-pomodoro
   </WhatToDoExpression>
 );
 
