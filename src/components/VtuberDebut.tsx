@@ -3,7 +3,7 @@ import { makeContainer } from '@machinat/core/service';
 import * as Messenger from '@machinat/messenger/components';
 import * as Telegram from '@machinat/telegram/components';
 import * as Line from '@machinat/line/components';
-import { ACTION, ServerDomain, LineLiffId } from '../constant';
+import { ACTION, ServerDomainI, LineLiffIdI } from '../constant';
 import getVtuber from '../utils/getVtuber';
 import encodePostbackData from '../utils/encodePostbackData';
 import ButtonsCard from './ButtonsCard';
@@ -183,4 +183,6 @@ YouTube: ${youtubeUrl}
 `;
   };
 
-export default makeContainer({ deps: [ServerDomain, LineLiffId] })(VtuberCard);
+export default makeContainer({ deps: [ServerDomainI, LineLiffIdI] })(
+  VtuberCard
+);

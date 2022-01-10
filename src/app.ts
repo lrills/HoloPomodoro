@@ -2,6 +2,7 @@ import Machinat from '@machinat/core';
 import HTTP from '@machinat/http';
 import Messenger from '@machinat/messenger';
 import MessengerAuthenticator from '@machinat/messenger/webview';
+import MessengerAssetManager from '@machinat/messenger/asset';
 import Line from '@machinat/line';
 import LineAuthenticator from '@machinat/line/webview';
 import Telegram from '@machinat/telegram';
@@ -19,8 +20,9 @@ import useSettings from './services/useSettings';
 import useUserProfile from './services/useUserProfile';
 import ClipsManager, { ClipsManagerOptions } from './services/ClipsManager';
 import Timer from './services/Timer';
+import VtuberRoot from './components/VtuberRoot';
 import nextConfigs from '../webview/next.config.js';
-import { ServerDomain, LineLiffId } from './constant';
+import { ServerDomainI, LineLiffIdI } from './constant';
 
 const {
   // location
@@ -135,6 +137,8 @@ const app = Machinat.createApp({
   ],
 
   services: [
+    { provide: Machinat.RootComponent, withValue: VtuberRoot },
+    MessengerAssetManager,
     // webview
     {
       provide: Webview.AuthenticatorList,
@@ -142,8 +146,8 @@ const app = Machinat.createApp({
     },
     { provide: Webview.AuthenticatorList, withProvider: TelegramAuthenticator },
     { provide: Webview.AuthenticatorList, withProvider: LineAuthenticator },
-    { provide: ServerDomain, withValue: DOMAIN },
-    { provide: LineLiffId, withValue: LINE_LIFF_ID },
+    { provide: ServerDomainI, withValue: DOMAIN },
+    { provide: LineLiffIdI, withValue: LINE_LIFF_ID },
     // app
     useClip,
     useIntent,

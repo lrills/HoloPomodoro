@@ -4,7 +4,7 @@ import * as Messenger from '@machinat/messenger/components';
 import * as Telegram from '@machinat/telegram/components';
 import * as Line from '@machinat/line/components';
 import encodePostbackData from '../utils/encodePostbackData';
-import { ServerDomain, LineLiffId } from '../constant';
+import { ServerDomainI, LineLiffIdI } from '../constant';
 import { AppActionType, WebviewPath } from '../types';
 
 type ActionButtonData = {
@@ -110,5 +110,5 @@ const ButtonsCard =
   };
 
 export default makeContainer({
-  deps: [ServerDomain, LineLiffId],
+  deps: [ServerDomainI, LineLiffIdI],
 })(ButtonsCard);
