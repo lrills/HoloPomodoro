@@ -3,7 +3,7 @@ import WhatToDoExpression from './WhatToDoExpression';
 
 const About = () => (
   <WhatToDoExpression>
-    I'm a fan made 🍅 Pomodoro Bot 🤖 that send you VTubers clips at the break ▶️
+    I'm a fan made 🍅 Pomodoro Bot 🤖 for VTubers fans
     <br />
     All the media you found here is owned by original author.
     <br />
