@@ -4,12 +4,14 @@ import * as $ from '@machinat/script/keywords';
 import VtuberDebut from '../components/VtuberDebut';
 import ButtonsCard from '../components/ButtonsCard';
 import getVtuber from '../utils/getVtuber';
+import  { ACTION} from '../constant';
 import type { AppEventContext, AppActionType, AppSettings } from '../types';
 
 type SelectOshiVars = {
   settings: AppSettings;
   action: AppActionType;
   isConfirmed: boolean;
+  isBeginning: boolean;
 };
 
 type SelectResult = {
@@ -28,22 +30,33 @@ export default build<
       settings,
       action: 'unknown',
       isConfirmed: false,
+      isBeginning: true,
     }),
   },
   <>
     <$.WHILE<SelectOshiVars> condition={({ vars }) => !vars.isConfirmed}>
-      {({ vars: { settings, action } }) => {
+      {({ vars: { settings, action, isBeginning } }) => {
         const vtuber = getVtuber(settings.oshi);
         return vtuber && action === 'oshi_updated' ? (
           <VtuberDebut id={vtuber.id} withOkButton />
-        ) : (
+        ) : isBeginning ? (
           <ButtonsCard
             buttons={[{ type: 'webview', path: 'oshi', text: 'Select 🙋' }]}
           >
             Please select your favorite VTuber 👇
           </ButtonsCard>
+        ) : (
+          <ButtonsCard
+            buttons={[
+              { type: 'webview', path: 'oshi', text: 'Select 🙋' },
+              { type: 'action', action: ACTION.NO, text: 'Maybe Later' },
+            ]}
+          >
+            Please select a VTuber first 👇
+          </ButtonsCard>
         );
       }}
+      <$.EFFECT set={({ vars }) => ({ ...vars, isBeginning: false })} />
 
       <$.PROMPT<SelectOshiVars, AppEventContext>
         key="ask-oshi"
@@ -58,22 +71,22 @@ export default build<
           return {
             ...vars,
             action: intent.type,
-            isConfirmed: !!vars.settings.oshi && intent.type === 'ok',
+            isConfirmed: !!vars.settings.oshi && intent.type === ACTION.OK,
           };
         }}
       />
 
       <$.IF<SelectOshiVars>
         condition={({ vars: { settings, action } }) =>
-          !settings.oshi && (action === 'no' || action === 'skip')
+          !settings.oshi && (action === ACTION.NO || action === ACTION.SKIP)
         }
       >
         <$.THEN>
-          {() => <p>You haven't choose a VTuber. Do you want to continue?</p>}
+          {() => <p>You haven't choose any VTuber. Do you want to continue?</p>}
           <$.PROMPT<SelectOshiVars, AppEventContext>
             key="confirm-no-oshi"
             set={({ vars }, { event, intent }) => {
-              if (intent.type === 'ok') {
+              if (intent.type === ACTION.OK) {
                 return { ...vars, isConfirmed: true };
               }
               if (event.type === 'settings_updated') {

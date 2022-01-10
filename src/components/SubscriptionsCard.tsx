@@ -52,7 +52,7 @@ const SubscriptionsCard = (
       <p>{titleContent}</p>
     );
 
-  if (withOkButton && platform !== 'telegram') {
+  if (withOkButton) {
     buttons.push({ type: 'action', action: ACTION.OK, text: 'Ok 👌' });
   }
 

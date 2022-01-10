@@ -39,7 +39,7 @@ const VtuberCard =
     const youtubeLabel = 'YouTube 📺';
     const youtubeUrl = `https://www.youtube.com/channel/${id}`;
     const selectVtuberLabel = 'Select VTuber 🙋';
-    const okLabel = 'Ok 👍';
+    const okLabel = 'Go 👍';
     const okData = encodePostbackData({ action: ACTION.OK });
     const title = `${name} ${oshiIcon}`;
 
@@ -130,7 +130,11 @@ const VtuberCard =
                   url={`https://${domain}/auth/telegram?redirectUrl=${encodeURIComponent(
                     `/webview/oshi`
                   )}`}
+
                 />
+                {withOkButton && (
+                  <Telegram.CallbackButton text={okLabel} data={okData} />
+                )}
               </Telegram.InlineKeyboard>
             }
           />

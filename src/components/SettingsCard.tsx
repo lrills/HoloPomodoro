@@ -64,7 +64,7 @@ const SettingsCard = (
       path: WEBVIEW_PATH.SETTINGS,
     });
   }
-  if (withOkButton && platform !== 'telegram') {
+  if (withOkButton) {
     buttons.push({ type: 'action', text: 'Ok 👍', action: ACTION.OK });
   }
   const settingsMsg =

@@ -128,6 +128,7 @@ export default build<
               <Pause />
             </>
           )}
+          <p>Let's go!</p>
           {vtuber && (
             <p>
               I'll give you a {vtuber.pomodoroIcon} every working time{' '}
