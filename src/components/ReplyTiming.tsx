@@ -85,7 +85,7 @@ export default makeContainer({ deps: [useClip] })(function StartTiming(
             ) : (
               <p>Have a clip while resting {oshiVtuber?.lang.positiveEnd}</p>
             )}
-            <ClipCard clip={clip} />
+            <ClipCard clip={clip} withYoutubeButton withMoreButton />
           </>
         )}
 
