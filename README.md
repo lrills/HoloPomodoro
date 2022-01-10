@@ -4,9 +4,7 @@ This is a fan made [pomodoro timer](https://en.wikipedia.org/wiki/Pomodoro_Techn
 bot. It encourages you as you favorite VTuber and send you a clip while taking a
 break.
 
-<video width="320" autoplay="autoplay" loop inline muted>
-  <source src="./media/demo.webm" type="video/webm" />
-</video>
+https://user-images.githubusercontent.com/7855890/148721516-efe09b22-56c6-4661-87a9-0bb307267ece.mp4
 
 ## Platforms
 
