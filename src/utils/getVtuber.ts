@@ -7,8 +7,8 @@ const vtubersMap = new Map(
 );
 
 function getVtubers(id: string): VtuberData;
-function getVtubers(id: null | string): null | VtuberData;
-function getVtubers(id: null | string): null | VtuberData {
+function getVtubers(id: null | undefined | string): null | VtuberData;
+function getVtubers(id: null | undefined | string): null | VtuberData {
   if (!id) {
     return null;
   }

@@ -4,8 +4,8 @@ import { OshiVtuberI } from '../constant';
 
 export default makeContainer({
   deps: [OshiVtuberI],
-})(function PomodoroIcon(vtuber) {
+})(function PositiveEnd(vtuber) {
   return (_: {}) => {
-    return <>{vtuber?.pomodoroIcon || '🍅'}</>;
+    return <>{vtuber?.lang.positiveEnd}</>;
   };
 });

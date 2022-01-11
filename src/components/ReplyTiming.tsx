@@ -9,6 +9,7 @@ import { TimingPhase, ACTION } from '../constant';
 import ClipCard from './ClipCard';
 import ActionsCard from './ActionsCard';
 import PomodoroIcon from './PomodoroIcon';
+import PositiveEnd from './PositiveEnd';
 
 type StartTimingProps = {
   isBeginning: boolean;
@@ -80,10 +81,12 @@ export default makeContainer({ deps: [useClip] })(function StartTiming(
           <>
             {members ? (
               <p>
-                Have a clip about {members} {oshiVtuber?.lang.positiveEnd}
+                Have a clip about {members} <PositiveEnd />
               </p>
             ) : (
-              <p>Have a clip while resting {oshiVtuber?.lang.positiveEnd}</p>
+              <p>
+                Have a clip while resting <PositiveEnd />
+              </p>
             )}
             <ClipCard clip={clip} withYoutubeButton withMoreButton />
           </>
@@ -97,7 +100,7 @@ export default makeContainer({ deps: [useClip] })(function StartTiming(
         >
           {timingPhase === TimingPhase.Working ? (
             <>
-              {ordinal(pomodoroNum)} <PomodoroIcon oshi={oshi} />
+              {ordinal(pomodoroNum)} <PomodoroIcon />
               {isBeginning && ' start'}
             </>
           ) : (

@@ -103,9 +103,9 @@ export default build<TimingVars, AppEventContext, TimingParams, TimingReturn>(
         }
       >
         <$.THEN>
-          {({ vars: { settings } }) => (
+          {() => (
             <StopingCard>
-              Skip current <PomodoroIcon oshi={settings.oshi} />?
+              Skip current <PomodoroIcon />?
             </StopingCard>
           )}
           {PROMPT_WHEN_TIMING('ask-should-skip')}

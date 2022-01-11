@@ -4,13 +4,11 @@ import { STATE_KEY } from '../constant';
 import { AppChannel, AppData } from '../types';
 import currentDayId from '../utils/currentDayId';
 
-const identity = (x) => x;
-
 const useSettings =
   (controller: StateController) =>
   async (
     channel: AppChannel,
-    updateFn: (data: AppData) => AppData = identity
+    updateFn: (data: AppData) => AppData = (x) => x
   ): Promise<AppData> => {
     const updatedSettings = await controller
       .channelState(channel)

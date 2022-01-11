@@ -24,8 +24,6 @@ const AskStarting = ({
   settings,
   withGreeting,
 }: AskStartingProps) => {
-  const pomodoroIcon = <PomodoroIcon oshi={settings.oshi} />;
-
   const greeting = withGreeting
     ? `${getVtuber(settings.oshi)?.lang.hello}!`
     : undefined;
@@ -40,7 +38,7 @@ const AskStarting = ({
               Continue{' '}
               {timingPhase === TimingPhase.Working ? (
                 <>
-                  {ordinal(pomodoroNum)} {pomodoroIcon}
+                  {ordinal(pomodoroNum)} <PomodoroIcon />
                 </>
               ) : (
                 <>break time ☕</>
@@ -61,7 +59,7 @@ const AskStarting = ({
               {pomodoroNum === settings.pomodoroPerDay
                 ? 'last'
                 : ordinal(pomodoroNum)}{' '}
-              {pomodoroIcon} today
+              <PomodoroIcon /> today
             </>
           ))}
       </ActionsCard>

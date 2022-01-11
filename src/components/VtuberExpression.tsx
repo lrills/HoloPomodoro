@@ -3,43 +3,41 @@ import { makeContainer } from '@machinat/core/service';
 import MessengerAssetManager from '@machinat/messenger/asset';
 import * as Messenger from '@machinat/messenger/components';
 import * as Line from '@machinat/line/components';
-import useSettings from '../services/useSettings';
-import { AppSettingsI } from '../constant';
-import { AppSettings, AppChannel } from '../types';
+import getVtuber from '../utils/getVtuber';
+import { OshiVtuberI } from '../constant';
+import { AppSettings } from '../types';
 
 type VTuberExpressionProps = {
-  channel: AppChannel;
+  settings: AppSettings;
   children: MachinatNode;
 };
 
 export default makeContainer({
-  deps: [useSettings, MessengerAssetManager] as const,
-})(function VTuberExpression(getSettings, messengerAssetManager) {
-  return async ({ children, channel }: VTuberExpressionProps, { platform }) => {
-    let settings: null | AppSettings = null;
+  deps: [MessengerAssetManager] as const,
+})(function VTuberExpression(messengerAssetManager) {
+  return async (
+    { settings, children }: VTuberExpressionProps,
+    { platform }
+  ) => {
     let expression = children;
+    const oshiVtuber = getVtuber(settings?.oshi);
 
-    if (channel) {
-      settings = await getSettings(channel, null);
-      if (settings?.oshi) {
-        const { oshi } = settings;
-
-        if (platform === 'messenger') {
-          const personaId = await messengerAssetManager.getPersona(oshi);
-          expression = (
-            <Messenger.Expression personaId={personaId}>
-              {children}
-            </Messenger.Expression>
-          );
-        } else if (platform === 'line') {
-          // TODO: line sender
-          expression = <Line.Expression>{children}</Line.Expression>;
-        }
+    if (oshiVtuber) {
+      if (platform === 'messenger') {
+        const personaId = await messengerAssetManager.getPersona(oshiVtuber.id);
+        expression = (
+          <Messenger.Expression personaId={personaId}>
+            {children}
+          </Messenger.Expression>
+        );
+      } else if (platform === 'line') {
+        // TODO: line sender
+        expression = <Line.Expression>{children}</Line.Expression>;
       }
     }
 
     return (
-      <Machinat.Provider provide={AppSettingsI} value={settings}>
+      <Machinat.Provider provide={OshiVtuberI} value={oshiVtuber}>
         {expression}
       </Machinat.Provider>
     );

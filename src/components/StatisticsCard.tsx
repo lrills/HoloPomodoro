@@ -36,9 +36,9 @@ const StatisticsCard = ({
           { type: 'webview', text: 'More 📊', path: WEBVIEW_PATH.STATISTICS },
         ]}
       >
-        ‣ Today's <PomodoroIcon oshi={oshi} />: {records.length}
+        ‣ Today's <PomodoroIcon />: {records.length}
         <br />
-        ‣ Avg. <PomodoroIcon oshi={oshi} />: {recentAvg}
+        ‣ Avg. <PomodoroIcon />: {recentAvg}
         <br />‣ Finish Rate: {finishRate}%
       </ButtonsCard>
     </>

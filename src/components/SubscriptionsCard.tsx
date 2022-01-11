@@ -2,8 +2,9 @@ import Machinat from '@machinat/core';
 import getVtuber from '../utils/getVtuber';
 import { AppSettings } from '../types';
 import { ACTION, WEBVIEW_PATH } from '../constant';
-import ActionsCard from './ActionsCard';
 import ButtonsCard, { ButtonData } from './ButtonsCard';
+import ActionsCard from './ActionsCard';
+import PositiveEnd from './PositiveEnd';
 
 type SubscriptionsCardProps = {
   title?: string;
@@ -16,7 +17,7 @@ const SubscriptionsCard = (
   { title, isChanged, settings, withOkButton }: SubscriptionsCardProps,
   { platform }
 ) => {
-  const { oshi, subscriptions } = settings;
+  const { subscriptions } = settings;
   const buttons: ButtonData[] = [
     { type: 'webview', path: WEBVIEW_PATH.SUBSCRIPTIONS, text: 'Subscribe 💑' },
   ];
@@ -28,12 +29,17 @@ const SubscriptionsCard = (
     );
   }
 
-  const oshiVtuber = getVtuber(oshi);
-  const ending = oshiVtuber?.lang.positiveEnd;
   const titleContent = title || (
     <>
       🔔 Subscriptions
-      {!isChanged ? ':' : ending ? ` changed ${ending}` : ' changed:'}
+      {isChanged ? (
+        <>
+          {' '}
+          changed <PositiveEnd />
+        </>
+      ) : (
+        ':'
+      )}
     </>
   );
   const titleMsg =

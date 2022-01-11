@@ -39,7 +39,7 @@ export default build<
           { type: ACTION.NO, text: 'No' },
         ]}
       >
-        Do you really want to reset <PomodoroIcon oshi={settings.oshi} /> today?
+        Do you really want to reset <PomodoroIcon /> today?
       </ActionsCard>
     )}
 

@@ -1,9 +1,11 @@
 import { makeInterface } from '@machinat/core/service';
-import { AppSettings } from './types';
+import { VtuberData } from './types';
 
 export const ServerDomainI = makeInterface<string>({ name: 'ServerDomain' });
 export const LineLiffIdI = makeInterface<string>({ name: 'LineLiffId' });
-export const AppSettingsI = makeInterface<AppSettings>({ name: 'AppSettings' });
+export const OshiVtuberI = makeInterface<null | VtuberData>({
+  name: 'OshiVtuber',
+});
 
 export const STATE_KEY = {
   APP_DATA: 'app_data' as const,

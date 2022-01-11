@@ -3,7 +3,7 @@ import { build } from '@machinat/script';
 import * as $ from '@machinat/script/keywords';
 import ButtonsCard from '../components/ButtonsCard';
 import SubscriptionsCard from '../components/SubscriptionsCard';
-import getVtuber from '../utils/getVtuber';
+import PositiveEnd from '../components/PositiveEnd';
 import type { AppEventContext, AppActionType, AppSettings } from '../types';
 
 type SelectResult = {
@@ -30,11 +30,10 @@ export default build<
     }),
   },
   <$.BLOCK<SelectSubscriptionsVars>>
-    {({ vars }) => {
+    {() => {
       return (
         <p>
-          I'll send you a clip at break{' '}
-          {getVtuber(vars.settings.oshi)?.lang.positiveEnd}
+          I'll send you a clip at break <PositiveEnd />
         </p>
       );
     }}

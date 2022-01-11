@@ -1,10 +1,10 @@
 import Machinat from '@machinat/core';
 import ordinal from 'ordinal';
 import { TimingPhase, ACTION } from '../constant';
-import getVtuber from '../utils/getVtuber';
 import { AppActionType, AppSettings } from '../types';
 import FinishTarget from './FinishTarget';
 import PomodoroIcon from './PomodoroIcon';
+import PositiveEnd from './PositiveEnd';
 
 type EndTimingProps = {
   phase: TimingPhase;
@@ -28,7 +28,7 @@ const EndTiming = ({
           : action === ACTION.SKIP
           ? 'is skipped'
           : 'is up'}{' '}
-        {getVtuber(settings.oshi)?.lang.positiveEnd}
+        <PositiveEnd />
       </p>
     );
   }
@@ -39,13 +39,13 @@ const EndTiming = ({
 
   return (
     <p>
-      {ordinal(pomodoroNum)} <PomodoroIcon oshi={settings.oshi} />{' '}
+      {ordinal(pomodoroNum)} <PomodoroIcon />{' '}
       {action === ACTION.PAUSE
         ? 'is paused'
         : action === ACTION.SKIP
         ? 'is skipped'
         : 'is finished'}{' '}
-      {getVtuber(settings.oshi)?.lang.positiveEnd}
+      <PositiveEnd />
     </p>
   );
 };

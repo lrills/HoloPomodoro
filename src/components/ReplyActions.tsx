@@ -12,6 +12,7 @@ import SubscriptionsCard from './SubscriptionsCard';
 import StatisticsCard from './StatisticsCard';
 import VtuberDebut from './VtuberDebut';
 import ClipCard from './ClipCard';
+import PositiveEnd from './PositiveEnd';
 
 type ReplyActionsProps = {
   phase: TimingPhase;
@@ -78,7 +79,11 @@ export default makeContainer({ deps: [useAppData, useClip] as const })(
       }
       if (action === ACTION.GET_CLIP) {
         if (isTiming && phase === TimingPhase.Working) {
-          return <p>You should focus right now {vtuber?.lang.positiveEnd}</p>;
+          return (
+            <p>
+              You should focus right now <PositiveEnd />
+            </p>
+          );
         }
 
         const clip = await fetchClip(

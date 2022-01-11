@@ -108,8 +108,7 @@ export default build<
                     <>Press the "Start ▶️" button to get started 👇</>
                   ) : (
                     <>
-                      Let's start your first{' '}
-                      <PomodoroIcon oshi={vars.settings.oshi} />
+                      Let's start your first <PomodoroIcon />
                     </>
                   )
                 ) : null}

@@ -3,14 +3,10 @@ import { build } from '@machinat/script';
 import * as $ from '@machinat/script/keywords';
 import SettingsCard from '../components/SettingsCard';
 import Pause from '../components/Pause';
+import PositiveEnd from '../components/PositiveEnd';
 import getVtuber from '../utils/getVtuber';
 import { ACTION } from '../constant';
-import type {
-  AppSettings,
-  AppEventContext,
-  // AppScriptYield,
-  AppActionType,
-} from '../types';
+import type { AppSettings, AppEventContext, AppActionType } from '../types';
 import SelectOshi from './SelectOshi';
 import SelectSubscriptions from './SelectSubscriptions';
 
@@ -79,7 +75,9 @@ export default build<
       const { oshi, subscriptions } = settings;
       const vtuber = getVtuber(oshi);
       return subscriptions.length === 0 ? (
-        <p>You can tell me to "subscribe" anytime {vtuber?.lang.positiveEnd}</p>
+        <p>
+          You can tell me to "subscribe" anytime <PositiveEnd />
+        </p>
       ) : vtuber && !subscriptions.includes(vtuber.id) ? (
         <p>
           I can't believe you don't choose {vtuber?.lang.selfCall || 'me'} 😭
@@ -87,12 +85,16 @@ export default build<
       ) : subscriptions.length === 1 ? (
         <p>
           Thanks for choosing only {vtuber?.lang.selfCall || 'me'}{' '}
-          {vtuber?.lang.positiveEnd} 😉
+          <PositiveEnd /> 😉
         </p>
       ) : subscriptions.length > 10 ? (
-        <p>You choose so many girls {vtuber?.lang.positiveEnd} 😡</p>
+        <p>
+          You choose so many girls <PositiveEnd /> 😡
+        </p>
       ) : (
-        <p>I see who you like {vtuber?.lang.positiveEnd} 😏</p>
+        <p>
+          I see who you like <PositiveEnd /> 😏
+        </p>
       );
     }}
 

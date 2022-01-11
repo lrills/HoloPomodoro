@@ -231,49 +231,40 @@ const main = (
                 );
               }
 
-              const { yieldValue } = runtime;
-              if (yieldValue) {
-                const {
-                  updateSettings,
+              const {
+                yieldValue: {
                   registerTimer,
                   cancelTimer,
-                  recordPomodoro,
                   resetPomodoro,
-                } = yieldValue;
-                const promises: Promise<any>[] = [];
+                  recordPomodoro,
+                } = {},
+              } = runtime;
+              const [, , { settings }] = await Promise.all([
+                registerTimer && timer.registerTimer(channel, registerTimer),
+                cancelTimer && timer.cancelTimer(channel, cancelTimer),
+                fetchAppData(channel, (appData) => {
+                  if (!resetPomodoro || !recordPomodoro) {
+                    return appData;
+                  }
 
-                if (updateSettings) {
-                  promises.push(fetchSettings(channel, updateSettings));
-                }
-                if (registerTimer) {
-                  promises.push(timer.registerTimer(channel, registerTimer));
-                }
-                if (cancelTimer) {
-                  promises.push(timer.cancelTimer(channel, cancelTimer));
-                }
-                if (recordPomodoro || resetPomodoro) {
-                  promises.push(
-                    fetchAppData(channel, (appData) => {
-                      const { statistics } = appData;
-                      return {
-                        ...appData,
-                        statistics: {
-                          ...statistics,
-                          records: resetPomodoro
-                            ? []
-                            : recordPomodoro
-                            ? [...statistics.records, recordPomodoro]
-                            : statistics.records,
-                        },
-                      };
-                    })
-                  );
-                }
-                await Promise.all(promises);
-              }
+                  const { statistics } = appData;
+                  return {
+                    ...appData,
+                    statistics: {
+                      ...statistics,
+                      records: resetPomodoro
+                        ? []
+                        : recordPomodoro
+                        ? [...statistics.records, recordPomodoro]
+                        : statistics.records,
+                    },
+                  };
+                }),
+              ]);
+
               await bot.render(
                 channel,
-                <VtuberExpression channel={channel}>
+                <VtuberExpression settings={settings}>
                   {runtime.output()}
                 </VtuberExpression>
               );

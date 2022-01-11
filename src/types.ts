@@ -115,7 +115,6 @@ export type AppEventContext = (
 ) & { intent: AppEventIntent };
 
 export type AppScriptYield = {
-  updateSettings?: Partial<AppSettings>;
   registerTimer?: Date;
   cancelTimer?: Date;
   recordPomodoro?: [Date, Date];

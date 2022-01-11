@@ -1,11 +1,11 @@
 import Machinat from '@machinat/core';
 // @ts-ignore
 import clipLanguages from '../../clipLanguages.json';
-import getVtuber from '../utils/getVtuber';
 import { ACTION, WEBVIEW_PATH } from '../constant';
 import type { AppSettings } from '../types';
-import ActionsCard from './ActionsCard';
 import ButtonsCard, { ButtonData } from './ButtonsCard';
+import ActionsCard from './ActionsCard';
+import PositiveEnd from './PositiveEnd';
 
 type SettingsCardProps = {
   title?: string;
@@ -26,13 +26,17 @@ const SettingsCard = (
   { platform }
 ) => {
   const okLabel = 'Ok 👍';
-
-  const vtuber = getVtuber(settings.oshi);
-  const ending = vtuber?.lang.positiveEnd;
   const titleContent = title || (
     <>
       ⚙️ Settings
-      {!isChanged ? ':' : ending ? ` changed ${ending}` : ' changed:'}
+      {isChanged ? (
+        <>
+          {' '}
+          changed <PositiveEnd />
+        </>
+      ) : (
+        ':'
+      )}
     </>
   );
   const titleMsg =
@@ -71,7 +75,7 @@ const SettingsCard = (
     buttons.length > 0 ? (
       <ButtonsCard buttons={buttons}>{settingsContent}</ButtonsCard>
     ) : (
-      <p>settingsContent</p>
+      <p>{settingsContent}</p>
     );
 
   return (
