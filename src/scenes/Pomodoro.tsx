@@ -21,6 +21,7 @@ type PomodoroVars = PomodoroParams & {
   shouldSaveTz: boolean;
   pomodoroRecord: null | [Date, Date];
   isFirstTime: boolean;
+  isReseted: boolean;
 };
 
 export default build<
@@ -42,6 +43,7 @@ export default build<
       shouldSaveTz: false,
       pomodoroRecord: null,
       isFirstTime: true,
+      isReseted: false,
     }),
   },
   <$.BLOCK<PomodoroVars>>
@@ -58,11 +60,12 @@ export default build<
         script={Starting}
         key="wait-starting"
         params={({ vars }) => ({ ...vars })}
-        set={({ vars }, { settings, isDayChanged }) => {
-          if (isDayChanged) {
+        set={({ vars }, { settings, isReseted }) => {
+          if (isReseted) {
             return {
               ...vars,
               settings,
+              isReseted,
               dayId: currentDayId(settings.timezone),
               pomodoroNum: 1,
               phase: TimingPhase.Working,
@@ -75,6 +78,7 @@ export default build<
           return {
             ...vars,
             settings,
+            isReseted,
             registerTimerAt: new Date(
               Date.now() +
                 (vars.phase === TimingPhase.Working
@@ -93,6 +97,7 @@ export default build<
         yield={({ vars }, prev) => ({
           ...prev,
           registerTimer: vars.registerTimerAt,
+          resetPomodoro: vars.isReseted,
         })}
       />
 
@@ -112,25 +117,31 @@ export default build<
                 : settings.shortBreakMins) * 60000,
           };
         }}
-        set={({ vars }, { settings, remainingTime, pomodoroRecord }) => {
+        set={(
+          { vars },
+          { isReseted, settings, remainingTime, pomodoroRecord }
+        ) => {
           const { pomodoroNum, phase } = vars;
           return {
             ...vars,
             settings,
             remainingTime,
             pomodoroRecord,
-            pomodoroNum:
-              remainingTime === 0 && phase === TimingPhase.Working
-                ? pomodoroNum + 1
-                : pomodoroNum,
-            phase:
-              remainingTime > 0
-                ? phase
-                : phase === TimingPhase.Working
-                ? pomodoroNum % 4 === 0
-                  ? TimingPhase.LongBreak
-                  : TimingPhase.ShortBreak
-                : TimingPhase.Working,
+            isReseted,
+            pomodoroNum: isReseted
+              ? 1
+              : remainingTime === 0 && phase === TimingPhase.Working
+              ? pomodoroNum + 1
+              : pomodoroNum,
+            phase: isReseted
+              ? TimingPhase.Working
+              : remainingTime > 0
+              ? phase
+              : phase === TimingPhase.Working
+              ? pomodoroNum % 4 === 0
+                ? TimingPhase.LongBreak
+                : TimingPhase.ShortBreak
+              : TimingPhase.Working,
           };
         }}
       />
@@ -140,6 +151,7 @@ export default build<
           ...prev,
           recordPomodoro: vars.pomodoroRecord || undefined,
           cancelTimer: vars.registerTimerAt,
+          resetPomodoro: vars.isReseted,
         })}
       />
     </$.WHILE>

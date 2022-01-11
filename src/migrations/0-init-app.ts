@@ -47,17 +47,15 @@ export const up = makeContainer({
           },
           {
             type: 'web_url',
-            title: '💑 Subscriptions',
-            url: `${ENTRY_URL}/webview/${WEBVIEW_PATH.SUBSCRIPTIONS}?platform=messenger`,
-            webview_height_ratio: 'full',
-            messenger_extensions: true,
-          },
-          {
-            type: 'web_url',
             title: '📊 Statistics',
             url: `${ENTRY_URL}/webview/${WEBVIEW_PATH.STATISTICS}?platform=messenger`,
             webview_height_ratio: 'full',
             messenger_extensions: true,
+          },
+          {
+            type: 'postback',
+            title: '🔄 Reset Pomodoro',
+            payload: encodePostbackData({ action: ACTION.RESET }),
           },
           {
             type: 'web_url',
@@ -95,8 +93,8 @@ export const up = makeContainer({
   await telegramBot.makeApiCall('setMyCommands', {
     commands: [
       { command: 'clip', description: '📼 Watch a Clip' },
-      { command: 'subscriptions', description: '💑 Subscriptions' },
       { command: 'statistics', description: '📊 Statistics' },
+      { command: 'reset', description: '🔄 Reset Pomodoro' },
       { command: 'settings', description: '⚙️ Settings' },
     ],
   });

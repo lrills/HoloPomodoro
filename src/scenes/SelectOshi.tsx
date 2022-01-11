@@ -4,7 +4,7 @@ import * as $ from '@machinat/script/keywords';
 import VtuberDebut from '../components/VtuberDebut';
 import ButtonsCard from '../components/ButtonsCard';
 import getVtuber from '../utils/getVtuber';
-import  { ACTION} from '../constant';
+import { ACTION } from '../constant';
 import type { AppEventContext, AppActionType, AppSettings } from '../types';
 
 type SelectOshiVars = {

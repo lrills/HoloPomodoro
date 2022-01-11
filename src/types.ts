@@ -119,6 +119,7 @@ export type AppScriptYield = {
   registerTimer?: Date;
   cancelTimer?: Date;
   recordPomodoro?: [Date, Date];
+  resetPomodoro?: boolean;
 };
 
 export type UpdateSettingsAction = {

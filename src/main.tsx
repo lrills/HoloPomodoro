@@ -237,24 +237,38 @@ const main = (
                   registerTimer,
                   cancelTimer,
                   recordPomodoro,
+                  resetPomodoro,
                 } = yieldValue;
+                const promises: Promise<any>[] = [];
 
-                await Promise.all([
-                  updateSettings && fetchSettings(channel, updateSettings),
-                  registerTimer && timer.registerTimer(channel, registerTimer),
-                  cancelTimer && timer.cancelTimer(channel, cancelTimer),
-                  recordPomodoro &&
+                if (updateSettings) {
+                  promises.push(fetchSettings(channel, updateSettings));
+                }
+                if (registerTimer) {
+                  promises.push(timer.registerTimer(channel, registerTimer));
+                }
+                if (cancelTimer) {
+                  promises.push(timer.cancelTimer(channel, cancelTimer));
+                }
+                if (recordPomodoro || resetPomodoro) {
+                  promises.push(
                     fetchAppData(channel, (appData) => {
                       const { statistics } = appData;
                       return {
                         ...appData,
                         statistics: {
                           ...statistics,
-                          records: [...statistics.records, recordPomodoro],
+                          records: resetPomodoro
+                            ? []
+                            : recordPomodoro
+                            ? [...statistics.records, recordPomodoro]
+                            : statistics.records,
                         },
                       };
-                    }),
-                ]);
+                    })
+                  );
+                }
+                await Promise.all(promises);
               }
               await bot.render(channel, runtime.output());
             }

@@ -130,7 +130,6 @@ const VtuberCard =
                   url={`https://${domain}/auth/telegram?redirectUrl=${encodeURIComponent(
                     `/webview/oshi`
                   )}`}
-
                 />
                 {withOkButton && (
                   <Telegram.CallbackButton text={okLabel} data={okData} />

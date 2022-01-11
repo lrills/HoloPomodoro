@@ -13,6 +13,7 @@ import type {
   AppSettings,
   AppChannel,
 } from '../types';
+import ResetPomodoro from './ResetPomodoro';
 
 type TimingParams = {
   time: number;
@@ -25,12 +26,14 @@ type TimingVars = TimingParams & {
   beginAt: Date;
   action: AppActionType;
   isBeginning: boolean;
+  isReseted: boolean;
 };
 
 type TimingReturn = {
   settings: AppSettings;
   pomodoroRecord: [Date, Date] | null;
   remainingTime: number;
+  isReseted: boolean;
 };
 
 const PROMPT_WHEN_TIMING = (key: string) => (
@@ -55,6 +58,7 @@ export default build<TimingVars, AppEventContext, TimingParams, TimingReturn>(
       beginAt: new Date(),
       action: ACTION.UNKNOWN,
       isBeginning: true,
+      isReseted: false,
     }),
   },
   <$.BLOCK<TimingVars>>
@@ -113,6 +117,34 @@ export default build<TimingVars, AppEventContext, TimingParams, TimingReturn>(
             })}
           />
         </$.THEN>
+        <$.ELSE_IF<TimingVars>
+          condition={({ vars }) => vars.action === ACTION.RESET}
+        >
+          <$.CALL<TimingVars, typeof ResetPomodoro>
+            script={ResetPomodoro}
+            params={({ vars: { settings } }) => ({ settings })}
+            key="ask-reset"
+            set={({ vars }, { isConfirmed, settings, action }) => ({
+              ...vars,
+              isReseted: isConfirmed,
+              settings,
+              action,
+            })}
+          />
+
+          <$.IF<TimingVars> condition={({ vars }) => vars.isReseted}>
+            <$.THEN>
+              <$.RETURN<TimingVars, TimingReturn>
+                value={({ vars: { settings } }) => ({
+                  settings,
+                  isReseted: true,
+                  pomodoroRecord: null,
+                  remainingTime: 0,
+                })}
+              />
+            </$.THEN>
+          </$.IF>
+        </$.ELSE_IF>
       </$.IF>
     </$.WHILE>
 
@@ -130,6 +162,7 @@ export default build<TimingVars, AppEventContext, TimingParams, TimingReturn>(
     <$.RETURN<TimingVars, TimingReturn>
       value={({ vars: { beginAt, time, settings, phase, action } }) => ({
         settings,
+        isReseted: false,
         pomodoroRecord:
           phase === TimingPhase.Working && action !== ACTION.PAUSE
             ? [beginAt, new Date()]

@@ -21,6 +21,7 @@ export const ACTION = {
   CHECK_STATISTICS: 'statistics' as const,
   GET_CLIP: 'clip' as const,
   ABOUT: 'about' as const,
+  RESET: 'reset' as const,
   TIME_UP: 'time_up' as const,
   SETTINGS_UPDATED: 'settings_updated' as const,
   OSHI_UPDATED: 'oshi_updated' as const,

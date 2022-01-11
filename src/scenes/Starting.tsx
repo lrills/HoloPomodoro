@@ -12,6 +12,7 @@ import type {
   AppActionType,
   AppChannel,
 } from '../types';
+import ResetPomodoro from './ResetPomodoro';
 
 type StartingParams = {
   isFirstTime: boolean;
@@ -24,21 +25,20 @@ type StartingParams = {
 
 type StartingVars = StartingParams & {
   action: AppActionType;
-  isBeginning: boolean;
-  isDayChanged: boolean;
+  shouldGreet: boolean;
+  isReseted: boolean;
 };
 
 type StartingReturn = {
   settings: AppSettings;
-  isDayChanged: boolean;
+  isReseted: boolean;
 };
 
 const CHECK_DAY_CHANGE = () => (
   <$.EFFECT<StartingVars>
     set={({ vars }) => {
       const dayId = currentDayId(vars.settings.timezone);
-      const isDayChanged = dayId !== vars.dayId;
-      if (!isDayChanged) {
+      if (dayId === vars.dayId) {
         return vars;
       }
 
@@ -46,11 +46,11 @@ const CHECK_DAY_CHANGE = () => (
         ...vars,
         dayId,
         action: vars.action === ACTION.START ? ACTION.OK : vars.action,
-        isDayChanged: true,
         pomodoroNum: 1,
         phase: TimingPhase.Working,
         remainingTime: undefined,
         isBeginning: true,
+        isReseted: true,
       };
     }}
   />
@@ -67,8 +67,12 @@ export default build<
     initVars: (params) => ({
       ...params,
       action: ACTION.OK,
-      isBeginning: true,
-      isDayChanged: false,
+      shouldGreet:
+        !params.isFirstTime &&
+        params.pomodoroNum === 1 &&
+        params.phase === TimingPhase.Working &&
+        !params.remainingTime,
+      isReseted: false,
     }),
   },
   <>
@@ -93,33 +97,29 @@ export default build<
             settings={vars.settings}
             defaultReply={
               <AskStarting
-                withGreeting={
-                  !vars.isFirstTime &&
-                  vars.isBeginning &&
-                  vars.pomodoroNum === 1 &&
-                  vars.phase === TimingPhase.Working
-                }
+                withGreeting={vars.shouldGreet}
                 settings={vars.settings}
                 pomodoroNum={vars.pomodoroNum}
                 timingPhase={vars.phase}
                 remainingTime={vars.remainingTime}
               >
-                {vars.isFirstTime &&
-                  (platform === 'telegram' ? (
+                {vars.isFirstTime ? (
+                  platform === 'telegram' ? (
                     <>Press the "Start ▶️" button to get started 👇</>
                   ) : (
                     <>
                       Let's start your first{' '}
                       <PomodoroIcon oshi={vars.settings.oshi} />
                     </>
-                  ))}
+                  )
+                ) : null}
               </AskStarting>
             }
           />
         );
       }}
       <$.EFFECT<StartingVars>
-        set={({ vars }) => ({ ...vars, isBeginning: false })}
+        set={({ vars }) => ({ ...vars, shouldGreet: false })}
       />
 
       <$.PROMPT<StartingVars, AppEventContext>
@@ -139,14 +139,36 @@ export default build<
         }}
       />
 
+      <$.IF<StartingVars>
+        condition={({ vars }) => vars.action === ACTION.RESET}
+      >
+        <$.THEN>
+          <$.CALL<StartingVars, typeof ResetPomodoro>
+            script={ResetPomodoro}
+            key="ask-reset"
+            params={({ vars: { settings } }) => ({ settings })}
+            set={({ vars }, { settings, isConfirmed, action }) =>
+              isConfirmed
+                ? {
+                    ...vars,
+                    action,
+                    settings,
+                    isReseted: true,
+                    pomodoroNum: 1,
+                    remainingTime: 0,
+                    phase: TimingPhase.Working,
+                  }
+                : { ...vars, action, settings }
+            }
+          />
+        </$.THEN>
+      </$.IF>
+
       {CHECK_DAY_CHANGE()}
     </$.WHILE>
 
     <$.RETURN<StartingVars, StartingReturn>
-      value={({ vars: { settings, isDayChanged } }) => ({
-        settings,
-        isDayChanged,
-      })}
+      value={({ vars: { settings, isReseted } }) => ({ settings, isReseted })}
     />
   </>
 );
