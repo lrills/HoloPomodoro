@@ -11,6 +11,7 @@ import useIntent from './services/useIntent';
 import useAppData from './services/useAppData';
 import useSettings from './services/useSettings';
 import useUserProfile from './services/useUserProfile';
+import VtuberExpression from './components/VtuberExpression';
 import { ACTION } from './constant';
 import type {
   ChatEventContext,
@@ -270,7 +271,12 @@ const main = (
                 }
                 await Promise.all(promises);
               }
-              await bot.render(channel, runtime.output());
+              await bot.render(
+                channel,
+                <VtuberExpression channel={channel}>
+                  {runtime.output()}
+                </VtuberExpression>
+              );
             }
         )
       )

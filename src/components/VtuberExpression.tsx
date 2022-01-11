@@ -1,4 +1,4 @@
-import Machinat from '@machinat/core';
+import Machinat, { MachinatNode } from '@machinat/core';
 import { makeContainer } from '@machinat/core/service';
 import MessengerAssetManager from '@machinat/messenger/asset';
 import * as Messenger from '@machinat/messenger/components';
@@ -7,18 +7,15 @@ import useSettings from '../services/useSettings';
 import { AppSettingsI } from '../constant';
 import { AppSettings, AppChannel } from '../types';
 
+type VTuberExpressionProps = {
+  channel: AppChannel;
+  children: MachinatNode;
+};
+
 export default makeContainer({
-  deps: [
-    useSettings,
-    Machinat.RenderingChannel,
-    MessengerAssetManager,
-  ] as const,
-})(function VTuberRoot(
-  getSettings,
-  channel: AppChannel | null,
-  messengerAssetManager
-) {
-  return async ({ children }, { platform }) => {
+  deps: [useSettings, MessengerAssetManager] as const,
+})(function VTuberExpression(getSettings, messengerAssetManager) {
+  return async ({ children, channel }: VTuberExpressionProps, { platform }) => {
     let settings: null | AppSettings = null;
     let expression = children;
 

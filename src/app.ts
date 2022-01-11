@@ -20,7 +20,6 @@ import useSettings from './services/useSettings';
 import useUserProfile from './services/useUserProfile';
 import ClipsManager, { ClipsManagerOptions } from './services/ClipsManager';
 import Timer from './services/Timer';
-import VtuberRoot from './components/VtuberRoot';
 import nextConfigs from '../webview/next.config.js';
 import { ServerDomainI, LineLiffIdI } from './constant';
 
@@ -137,7 +136,6 @@ const app = Machinat.createApp({
   ],
 
   services: [
-    { provide: Machinat.RootComponent, withValue: VtuberRoot },
     MessengerAssetManager,
     // webview
     {
