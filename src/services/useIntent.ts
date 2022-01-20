@@ -5,7 +5,7 @@ import { ACTION } from '../constant';
 import { ChatEventContext, AppEventIntent, AppActionType } from '../types';
 
 const useIntent =
-  (recognizer: DialogFlow.IntentRecognizer) =>
+  (recognizer: DialogFlow.Recognizer) =>
   async (event: ChatEventContext['event']): Promise<AppEventIntent> => {
     if (
       event.platform === 'messenger' &&
@@ -53,5 +53,5 @@ const useIntent =
 
 export default makeFactoryProvider({
   lifetime: 'scoped',
-  deps: [DialogFlow.IntentRecognizer],
+  deps: [DialogFlow.Recognizer],
 })(useIntent);

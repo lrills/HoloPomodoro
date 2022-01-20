@@ -37,7 +37,7 @@ async function dev() {
   });
 
   nodemon({
-    exec: 'ts-node -r dotenv/config',
+    exec: './node_modules/.bin/ts-node',
     script: './src/index.ts',
     watch: './src',
     ext: 'ts,tsx',

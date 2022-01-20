@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import Machinat from '@machinat/core';
-import { FileState } from '@machinat/local-state';
+import { FileState } from '@machinat/dev-tools';
 import RedisState from '@machinat/redis-state';
 import Messenger from '@machinat/messenger';
 import MessengerAssetManager from '@machinat/messenger/asset';

@@ -209,7 +209,7 @@ const main = (
 
                 if (event.user) {
                   const profile = await getUserProfile(event.user);
-                  timezone = profile?.timezone;
+                  timezone = profile?.timeZone;
 
                   if (profile?.languageCode) {
                     const language = profile.languageCode.split(/[-_]/)[0];

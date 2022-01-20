@@ -9,18 +9,19 @@ import Telegram from '@machinat/telegram';
 import TelegramAuthenticator from '@machinat/telegram/webview';
 import Webview from '@machinat/webview';
 import RedisState from '@machinat/redis-state';
-import { FileState } from '@machinat/local-state';
+import { FileState } from '@machinat/dev-tools';
 import DialogFlow from '@machinat/dialogflow';
 import Script from '@machinat/script';
 import * as scenesScirpts from './scenes';
+import nextConfigs from '../webview/next.config.js';
+import recognitionData from './recognitionData';
 import useClip from './services/useClip';
 import useIntent from './services/useIntent';
 import useAppData from './services/useAppData';
 import useSettings from './services/useSettings';
 import useUserProfile from './services/useUserProfile';
-import ClipsManager, { ClipsManagerOptions } from './services/ClipsManager';
 import Timer from './services/Timer';
-import nextConfigs from '../webview/next.config.js';
+import ClipsManager, { ClipsManagerOptions } from './services/ClipsManager';
 import { ServerDomainI, LineLiffIdI } from './constant';
 
 const {
@@ -81,8 +82,10 @@ const app = Machinat.createApp({
     }),
 
     DialogFlow.initModule({
+      recognitionData,
       projectId: DIALOG_FLOW_PROJECT_ID,
-      gcpAuthConfig: GOOGLE_APPLICATION_CREDENTIALS
+      environment: `holo-pomodoro-${DEV ? 'dev' : 'prod'}`,
+      clientOptions: GOOGLE_APPLICATION_CREDENTIALS
         ? undefined
         : {
             credentials: {
@@ -90,7 +93,6 @@ const app = Machinat.createApp({
               private_key: DIALOG_FLOW_PRIVATE_KEY,
             },
           },
-      defaultLanguageCode: 'en-US',
     }),
   ],
 

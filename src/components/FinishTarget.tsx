@@ -22,8 +22,7 @@ const FinishTarget = ({ oshi }: FinishTargetProps) => {
           },
         ]}
       >
-        Today's target is finished! You can still do more{' '}
-        <PomodoroIcon />
+        Today's target is finished! You can still do more <PomodoroIcon />
       </ButtonsCard>
       <Pause />
     </>
