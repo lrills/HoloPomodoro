@@ -5,7 +5,7 @@ import useAppData from './useAppData';
 
 export default makeFactoryProvider({
   lifetime: 'scoped',
-  deps: [useAppData, ClipsManager] as const,
+  deps: [useAppData, ClipsManager],
 })(function useClip(updateAppData, clipsManager) {
   return async (
     channel: AppChannel,

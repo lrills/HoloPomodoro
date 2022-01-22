@@ -13,7 +13,7 @@ type VTuberExpressionProps = {
 };
 
 export default makeContainer({
-  deps: [MessengerAssetManager] as const,
+  deps: [MessengerAssetManager],
 })(function VTuberExpression(messengerAssetManager) {
   return async (
     { settings, children }: VTuberExpressionProps,

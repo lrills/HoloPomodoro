@@ -23,7 +23,7 @@ type ReplyActionsProps = {
   defaultReply?: MachinatNode;
 };
 
-export default makeContainer({ deps: [useAppData, useClip] as const })(
+export default makeContainer({ deps: [useAppData, useClip] })(
   function ReplyActions(fetchAppData, fetchClip) {
     return async ({
       action,

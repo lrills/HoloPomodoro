@@ -41,7 +41,7 @@ const main = (
         ctx.event.type === 'update_settings'
     ),
     map(
-      makeContainer({ deps: [useSettings] as const })(
+      makeContainer({ deps: [useSettings] })(
         (fetchSettings) =>
           async ({ event: { payload, channel }, metadata: { auth }, bot }) => {
             const newSettings = await fetchSettings(
@@ -185,7 +185,7 @@ const main = (
             useSettings,
             useAppData,
             useUserProfile,
-          ] as const,
+          ],
         })(
           (
               bot,
@@ -281,7 +281,7 @@ const main = (
         ctx.event.type === 'fetch_data'
     ),
     tap(
-      makeContainer({ deps: [useAppData, useUserProfile] as const })(
+      makeContainer({ deps: [useAppData, useUserProfile] })(
         (getAppData, getUserProfile) =>
           async ({ bot, event, metadata: { auth } }) => {
             const { timezone } = event.payload;
