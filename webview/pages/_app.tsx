@@ -2,9 +2,9 @@ import React from 'react';
 import App from 'next/app';
 import getConfig from 'next/config';
 import WebviewClient, { useEventReducer } from '@machinat/webview/client';
-import { MessengerClientAuthenticator } from '@machinat/messenger/webview';
-import { TelegramClientAuthenticator } from '@machinat/telegram/webview';
-import { LineClientAuthenticator } from '@machinat/line/webview';
+import MessengerClientAuthenticator from '@machinat/messenger/webview/client';
+import TelegramClientAuthenticator from '@machinat/telegram/webview/client';
+import LineClientAuthenticator from '@machinat/line/webview/client';
 import { WebClient, WebAppData, SendWebActionFn } from '../types';
 
 const { publicRuntimeConfig } = getConfig();
