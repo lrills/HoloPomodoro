@@ -1,45 +1,19 @@
 #!/usr/bin/env node
-import Machinat from '@machinat/core';
-import { FileState } from '@machinat/dev-tools';
-import RedisState from '@machinat/redis-state';
-import Messenger from '@machinat/messenger';
 import MessengerAssetManager from '@machinat/messenger/asset';
 import commander from 'commander';
+import createApp from '../app';
 import changeYoutubeThumbnailSize from '../utils/changeYoutubeThumbnailSize';
 import vtubers from '../../vtubers.json';
-
-const { NODE_ENV, MESSENGER_PAGE_ID, MESSENGER_ACCESS_TOKEN, REDIS_URL } =
-  process.env as Record<string, string>;
-const DEV = NODE_ENV !== 'production';
 
 commander
   .usage('[options]')
   .option('--delete', 'delete all VTuber persona')
   .parse(process.argv);
+
 const options = commander.opts();
+const app = createApp();
 
 async function updateMessengerPersona() {
-  const app = Machinat.createApp({
-    platforms: [
-      Messenger.initModule({
-        pageId: Number(MESSENGER_PAGE_ID),
-        accessToken: MESSENGER_ACCESS_TOKEN,
-        noServer: true,
-      }),
-    ],
-    modules: [
-      DEV
-        ? FileState.initModule({
-            path: './.state_storage',
-          })
-        : RedisState.initModule({
-            clientOptions: {
-              url: REDIS_URL,
-            },
-          }),
-    ],
-    services: [MessengerAssetManager],
-  });
   await app.start();
   const [assetManager] = app.useServices([MessengerAssetManager]);
 
@@ -51,6 +25,8 @@ async function updateMessengerPersona() {
 
   app.stop();
 }
+
+updateMessengerPersona();
 
 async function createPersonas(assetManager: MessengerAssetManager) {
   console.log(`[persona:update] start updating persona`);
@@ -90,5 +66,3 @@ async function deletePersonas(assetManager: MessengerAssetManager) {
 
   console.log(`[persona:delete] deleted ${deletedCount} personas`);
 }
-
-updateMessengerPersona();

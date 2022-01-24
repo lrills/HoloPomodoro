@@ -1,12 +1,13 @@
 import { ServiceScope } from '@machinat/core/service';
 import { Stream, fromApp } from '@machinat/stream';
 import main from './main';
-import app from './app';
+import createApp from './app';
 import { ACTION } from './constant';
 import Timer from './services/Timer';
 import ClipsManager from './services/ClipsManager';
 import { AppEventContext, ChatEventContext, WebEventContext } from './types';
 
+const app = createApp();
 app.onError(console.error);
 app
   .start()
