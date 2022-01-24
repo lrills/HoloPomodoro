@@ -1,12 +1,12 @@
 import Machinat from '@machinat/core';
 import HTTP from '@machinat/http';
 import Messenger from '@machinat/messenger';
-import MessengerAuthenticator from '@machinat/messenger/webview';
+import MessengerWebviewAuth from '@machinat/messenger/webview';
 import MessengerAssetManager from '@machinat/messenger/asset';
 import Line from '@machinat/line';
-import LineAuthenticator from '@machinat/line/webview';
+import LineWebviewAuth from '@machinat/line/webview';
 import Telegram from '@machinat/telegram';
-import TelegramAuthenticator from '@machinat/telegram/webview';
+import TelegramWebviewAuth from '@machinat/telegram/webview';
 import Webview from '@machinat/webview';
 import RedisState from '@machinat/redis-state';
 import { FileState } from '@machinat/dev-tools';
@@ -122,11 +122,17 @@ const app = Machinat.createApp({
     }),
 
     Webview.initModule<
-      MessengerAuthenticator | TelegramAuthenticator | LineAuthenticator
+      MessengerWebviewAuth | TelegramWebviewAuth | LineWebviewAuth
     >({
       webviewHost: DOMAIN,
       webviewPath: '/webview',
+
       authSecret: WEBVIEW_AUTH_SECRET,
+      authPlatforms: [
+        MessengerWebviewAuth,
+        TelegramWebviewAuth,
+        LineWebviewAuth,
+      ],
 
       sameSite: 'none',
       nextServerOptions: {
@@ -139,21 +145,6 @@ const app = Machinat.createApp({
 
   services: [
     MessengerAssetManager,
-    // webview
-    {
-      provide: Webview.AuthenticatorList,
-      withProvider: MessengerAuthenticator,
-    },
-    { provide: Webview.AuthenticatorList, withProvider: TelegramAuthenticator },
-    { provide: Webview.AuthenticatorList, withProvider: LineAuthenticator },
-    { provide: ServerDomainI, withValue: DOMAIN },
-    { provide: LineLiffIdI, withValue: LINE_LIFF_ID },
-    // app
-    useClip,
-    useIntent,
-    useAppData,
-    useSettings,
-    useUserProfile,
     Timer,
     ClipsManager,
     {
@@ -164,6 +155,13 @@ const app = Machinat.createApp({
         refreshLastestHours: 2,
       },
     },
+    useClip,
+    useIntent,
+    useAppData,
+    useSettings,
+    useUserProfile,
+    { provide: ServerDomainI, withValue: DOMAIN },
+    { provide: LineLiffIdI, withValue: LINE_LIFF_ID },
   ],
 });
 

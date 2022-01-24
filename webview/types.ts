@@ -1,7 +1,7 @@
 import WebviewClient from '@machinat/webview/client';
-import { MessengerClientAuthenticator } from '@machinat/messenger/webview';
-import { TelegramClientAuthenticator } from '@machinat/telegram/webview';
-import { LineClientAuthenticator } from '@machinat/line/webview';
+import MessengerWebviewAuth from '@machinat/messenger/webview/client';
+import TelegramWebviewAuth from '@machinat/telegram/webview/client';
+import LineWebviewAuth from '@machinat/line/webview/client';
 import type {
   WebPushEvent,
   WebAppData,
@@ -18,9 +18,7 @@ export type {
 } from '../src/types';
 
 export type WebClient = WebviewClient<
-  | MessengerClientAuthenticator
-  | TelegramClientAuthenticator
-  | LineClientAuthenticator,
+  MessengerWebviewAuth | TelegramWebviewAuth | LineWebviewAuth,
   WebPushEvent
 >;
 
