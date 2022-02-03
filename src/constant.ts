@@ -1,4 +1,4 @@
-import { makeInterface } from '@machinat/core/service';
+import { makeInterface } from '@machinat/core';
 import { VtuberData } from './types';
 
 export const ServerDomainI = makeInterface<string>({ name: 'ServerDomain' });

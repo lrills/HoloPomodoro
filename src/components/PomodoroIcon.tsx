@@ -1,5 +1,4 @@
-import Machinat from '@machinat/core';
-import { makeContainer } from '@machinat/core/service';
+import Machinat, { makeContainer } from '@machinat/core';
 import { OshiVtuberI } from '../constant';
 
 export default makeContainer({

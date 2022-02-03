@@ -1,5 +1,4 @@
-import Machinat, { MachinatNode } from '@machinat/core';
-import { makeContainer } from '@machinat/core/service';
+import Machinat, { makeContainer, MachinatNode } from '@machinat/core';
 import useAppData from '../services/useAppData';
 import useClip from '../services/useClip';
 import getVtuber from '../utils/getVtuber';

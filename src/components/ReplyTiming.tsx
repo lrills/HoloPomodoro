@@ -1,5 +1,4 @@
-import Machinat from '@machinat/core';
-import { makeContainer } from '@machinat/core/service';
+import Machinat, { makeContainer } from '@machinat/core';
 import ordinal from 'ordinal';
 import useClip from '../services/useClip';
 import getVtuber from '../utils/getVtuber';

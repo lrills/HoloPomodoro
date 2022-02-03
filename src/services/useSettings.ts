@@ -1,4 +1,4 @@
-import { makeFactoryProvider } from '@machinat/core/service';
+import { makeFactoryProvider } from '@machinat/core';
 import { AppSettings, AppChannel } from '../types';
 import useAppData from './useAppData';
 

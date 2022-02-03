@@ -1,5 +1,4 @@
-import Machinat, { MachinatNode } from '@machinat/core';
-import { makeContainer } from '@machinat/core/service';
+import Machinat, { makeContainer, MachinatNode } from '@machinat/core';
 import MessengerAssetManager from '@machinat/messenger/asset';
 import * as Messenger from '@machinat/messenger/components';
 import * as Line from '@machinat/line/components';

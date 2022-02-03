@@ -1,4 +1,4 @@
-import { makeFactoryProvider } from '@machinat/core/service';
+import { makeFactoryProvider } from '@machinat/core';
 import { AppChannel, ClipData } from '../types';
 import ClipsManager from './ClipsManager';
 import useAppData from './useAppData';

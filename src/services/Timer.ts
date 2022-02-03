@@ -1,6 +1,4 @@
-import { makeClassProvider } from '@machinat/core/service';
-import StateController from '@machinat/core/base/StateController';
-import BaseBot from '@machinat/core/base/Bot';
+import { makeClassProvider, StateController, BasicBot } from '@machinat/core';
 import Script from '@machinat/script';
 import type { MessengerChat } from '@machinat/messenger';
 import type { TelegramChat } from '@machinat/telegram';
@@ -99,5 +97,5 @@ export class Timer {
 
 export default makeClassProvider({
   lifetime: 'singleton',
-  deps: [StateController, Script.Processor, BaseBot],
+  deps: [StateController, Script.Processor, BasicBot],
 })(Timer);

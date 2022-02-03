@@ -1,5 +1,4 @@
-import { makeFactoryProvider } from '@machinat/core/service';
-import StateController from '@machinat/core/base/StateController';
+import { makeFactoryProvider, StateController } from '@machinat/core';
 import { STATE_KEY } from '../constant';
 import { AppChannel, AppData } from '../types';
 import currentDayId from '../utils/currentDayId';

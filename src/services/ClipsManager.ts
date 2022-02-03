@@ -1,5 +1,8 @@
-import { makeClassProvider, makeInterface } from '@machinat/core/service';
-import StateController from '@machinat/core/base/StateController';
+import {
+  makeClassProvider,
+  makeInterface,
+  StateController,
+} from '@machinat/core';
 import fetch from 'node-fetch';
 import getVtuber from '../utils/getVtuber';
 import vtubers from '../../vtubers.json';
