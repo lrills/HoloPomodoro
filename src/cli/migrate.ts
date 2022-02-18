@@ -5,7 +5,7 @@ import { Umzug, JSONStorage } from 'umzug';
 import commander from 'commander';
 import createApp from '../app';
 
-const app = createApp();
+const app = createApp({ noServer: true });
 
 const umzug = new Umzug({
   storage: new JSONStorage({
