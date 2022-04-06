@@ -1,5 +1,5 @@
 import Machinat from '@machinat/core';
-import { WEBVIEW_PATH } from '../constant';
+import { WEBVIEW_PAGE } from '../constant';
 import type { AppSettings, Statistics } from '../types';
 import ButtonsCard from './ButtonsCard';
 import PomodoroIcon from './PomodoroIcon';
@@ -12,7 +12,6 @@ type StatisticsCardProps = {
 };
 
 const StatisticsCard = ({
-  oshi,
   settings,
   statistics,
   noTitle = false,
@@ -33,7 +32,7 @@ const StatisticsCard = ({
       {noTitle ? null : <p>📜 Records:</p>}
       <ButtonsCard
         buttons={[
-          { type: 'webview', text: 'More 📊', path: WEBVIEW_PATH.STATISTICS },
+          { type: 'webview', text: 'More 📊', page: WEBVIEW_PAGE.STATISTICS },
         ]}
       >
         ‣ Today's <PomodoroIcon />: {records.length}

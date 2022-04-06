@@ -2,7 +2,7 @@ import Machinat, { makeContainer, MachinatNode } from '@machinat/core';
 import useAppData from '../services/useAppData';
 import useClip from '../services/useClip';
 import getVtuber from '../utils/getVtuber';
-import { ACTION, WEBVIEW_PATH, TimingPhase } from '../constant';
+import { ACTION, WEBVIEW_PAGE, TimingPhase } from '../constant';
 import type { AppActionType, AppSettings, AppChannel } from '../types';
 import About from './About';
 import ButtonsCard from './ButtonsCard';
@@ -100,7 +100,7 @@ export default makeContainer({ deps: [useAppData, useClip] })(
               buttons={[
                 {
                   type: 'webview',
-                  path: WEBVIEW_PATH.SUBSCRIPTIONS,
+                  page: WEBVIEW_PAGE.SUBSCRIPTIONS,
                   text: 'Subscribe 💑',
                 },
               ]}

@@ -1,7 +1,7 @@
 import Machinat from '@machinat/core';
 import getVtuber from '../utils/getVtuber';
 import { AppSettings } from '../types';
-import { ACTION, WEBVIEW_PATH } from '../constant';
+import { ACTION, WEBVIEW_PAGE } from '../constant';
 import ButtonsCard, { ButtonData } from './ButtonsCard';
 import ActionsCard from './ActionsCard';
 import PositiveEnd from './PositiveEnd';
@@ -19,7 +19,7 @@ const SubscriptionsCard = (
 ) => {
   const { subscriptions } = settings;
   const buttons: ButtonData[] = [
-    { type: 'webview', path: WEBVIEW_PATH.SUBSCRIPTIONS, text: 'Subscribe 💑' },
+    { type: 'webview', page: WEBVIEW_PAGE.SUBSCRIPTIONS, text: 'Subscribe 💑' },
   ];
   if (subscriptions.length === 0) {
     return (

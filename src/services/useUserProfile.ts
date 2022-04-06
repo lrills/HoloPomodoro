@@ -16,9 +16,7 @@ const useUserProfile =
     );
     if (
       cachedProfile &&
-      (user.platform !== 'telegram' ||
-        cachedProfile.avatarUrl ||
-        !user.photoUrl)
+      (user.platform !== 'telegram' || cachedProfile.avatarUrl)
     ) {
       return cachedProfile;
     }

@@ -1,5 +1,5 @@
 import Machinat from '@machinat/core';
-import { WEBVIEW_PATH } from '../constant';
+import { WEBVIEW_PAGE } from '../constant';
 import getVtuber from '../utils/getVtuber';
 import ButtonsCard from './ButtonsCard';
 import PomodoroIcon from './PomodoroIcon';
@@ -18,7 +18,7 @@ const FinishTarget = ({ oshi }: FinishTargetProps) => {
           {
             type: 'webview',
             text: 'See Records 📊',
-            path: WEBVIEW_PATH.STATISTICS,
+            page: WEBVIEW_PAGE.STATISTICS,
           },
         ]}
       >

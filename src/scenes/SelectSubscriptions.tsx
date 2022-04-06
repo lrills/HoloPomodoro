@@ -4,6 +4,7 @@ import * as $ from '@machinat/script/keywords';
 import ButtonsCard from '../components/ButtonsCard';
 import SubscriptionsCard from '../components/SubscriptionsCard';
 import PositiveEnd from '../components/PositiveEnd';
+import { WEBVIEW_PAGE } from '../constant';
 import type { AppEventContext, AppActionType, AppSettings } from '../types';
 
 type SelectResult = {
@@ -47,7 +48,11 @@ export default build<
         return subscriptions.length === 0 ? (
           <ButtonsCard
             buttons={[
-              { type: 'webview', path: 'subscriptions', text: 'Subscribe 💑' },
+              {
+                type: 'webview',
+                page: WEBVIEW_PAGE.SUBSCRIPTIONS,
+                text: 'Subscribe 💑',
+              },
               { type: 'action', action: 'ok', text: 'Ok 👌' },
             ]}
           >
@@ -59,7 +64,11 @@ export default build<
           <ButtonsCard
             buttons={[
               { type: 'action', action: 'ok', text: 'Only you ❤️' },
-              { type: 'webview', path: 'subscriptions', text: 'Subscribe 💑' },
+              {
+                type: 'webview',
+                page: WEBVIEW_PAGE.SUBSCRIPTIONS,
+                text: 'Subscribe 💑',
+              },
             ]}
           >
             You can subscribe more VTubers here 👇

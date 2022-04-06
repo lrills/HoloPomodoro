@@ -1,7 +1,7 @@
 import Machinat from '@machinat/core';
 // @ts-ignore
 import clipLanguages from '../../clipLanguages.json';
-import { ACTION, WEBVIEW_PATH } from '../constant';
+import { ACTION, WEBVIEW_PAGE } from '../constant';
 import type { AppSettings } from '../types';
 import ButtonsCard, { ButtonData } from './ButtonsCard';
 import ActionsCard from './ActionsCard';
@@ -65,7 +65,7 @@ const SettingsCard = (
     buttons.push({
       type: 'webview',
       text: 'Edit 📝',
-      path: WEBVIEW_PATH.SETTINGS,
+      page: WEBVIEW_PAGE.SETTINGS,
     });
   }
   if (withOkButton) {

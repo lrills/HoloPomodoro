@@ -3,7 +3,7 @@ import Messenger from '@machinat/messenger';
 import Telegram from '@machinat/telegram';
 import Line from '@machinat/line';
 import encodePostbackData from '../utils/encodePostbackData';
-import { ACTION, WEBVIEW_PATH } from '../constant';
+import { ACTION, WEBVIEW_PAGE } from '../constant';
 
 const {
   DOMAIN,
@@ -48,7 +48,7 @@ export const up = makeContainer({
           {
             type: 'web_url',
             title: '📊 Statistics',
-            url: `${ENTRY_URL}/webview/${WEBVIEW_PATH.STATISTICS}?platform=messenger`,
+            url: `${ENTRY_URL}/webview/${WEBVIEW_PAGE.STATISTICS}?platform=messenger`,
             webview_height_ratio: 'full',
             messenger_extensions: true,
           },
@@ -60,7 +60,7 @@ export const up = makeContainer({
           {
             type: 'web_url',
             title: '⚙️ Edit Settings',
-            url: `${ENTRY_URL}/webview/${WEBVIEW_PATH.SETTINGS}?platform=messenger`,
+            url: `${ENTRY_URL}/webview/${WEBVIEW_PAGE.SETTINGS}?platform=messenger`,
             webview_height_ratio: 'full',
             messenger_extensions: true,
           },

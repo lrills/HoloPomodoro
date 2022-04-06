@@ -1,8 +1,6 @@
 import { makeInterface } from '@machinat/core';
 import { VtuberData } from './types';
 
-export const ServerDomainI = makeInterface<string>({ name: 'ServerDomain' });
-export const LineLiffIdI = makeInterface<string>({ name: 'LineLiffId' });
 export const OshiVtuberI = makeInterface<null | VtuberData>({
   name: 'OshiVtuber',
 });
@@ -38,7 +36,7 @@ export enum TimingPhase {
   LongBreak,
 }
 
-export const WEBVIEW_PATH = {
+export const WEBVIEW_PAGE = {
   STATISTICS: 'statistics' as const,
   SETTINGS: 'settings' as const,
   OSHI: 'oshi' as const,

@@ -1,11 +1,9 @@
 import { makeClassProvider, StateController, BasicBot } from '@machinat/core';
 import Script from '@machinat/script';
-import type { MessengerChat } from '@machinat/messenger';
-import type { TelegramChat } from '@machinat/telegram';
-import type { LineChat } from '@machinat/line';
+import type { AppChannel } from '../types';
 
 type TimerData = {
-  channel: MessengerChat | TelegramChat | LineChat;
+  channel: AppChannel;
 };
 
 type TimeUpListener = (timeUpTargets: TimerData[]) => void;
@@ -37,10 +35,7 @@ export class Timer {
     }
   }
 
-  async registerTimer(
-    channel: MessengerChat | TelegramChat | LineChat,
-    dueDate: Date
-  ): Promise<void> {
+  async registerTimer(channel: AppChannel, dueDate: Date): Promise<void> {
     const interval = getDueTimeInterval(dueDate);
     if (this._currentInterval >= interval) {
       return;
@@ -51,10 +46,7 @@ export class Timer {
       .set<TimerData>(channel.uid, { channel });
   }
 
-  async cancelTimer(
-    channel: MessengerChat | TelegramChat | LineChat,
-    dueDate: Date
-  ): Promise<boolean> {
+  async cancelTimer(channel: AppChannel, dueDate: Date): Promise<boolean> {
     const interval = getDueTimeInterval(dueDate);
     if (this._currentInterval >= interval) {
       return false;

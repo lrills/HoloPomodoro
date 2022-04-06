@@ -4,7 +4,7 @@ import * as $ from '@machinat/script/keywords';
 import VtuberDebut from '../components/VtuberDebut';
 import ButtonsCard from '../components/ButtonsCard';
 import getVtuber from '../utils/getVtuber';
-import { ACTION } from '../constant';
+import { ACTION, WEBVIEW_PAGE } from '../constant';
 import type { AppEventContext, AppActionType, AppSettings } from '../types';
 
 type SelectOshiVars = {
@@ -41,14 +41,16 @@ export default build<
           <VtuberDebut id={vtuber.id} withOkButton />
         ) : isBeginning ? (
           <ButtonsCard
-            buttons={[{ type: 'webview', path: 'oshi', text: 'Select 🙋' }]}
+            buttons={[
+              { type: 'webview', page: WEBVIEW_PAGE.OSHI, text: 'Select 🙋' },
+            ]}
           >
             Please select your favorite VTuber 👇
           </ButtonsCard>
         ) : (
           <ButtonsCard
             buttons={[
-              { type: 'webview', path: 'oshi', text: 'Select 🙋' },
+              { type: 'webview', page: WEBVIEW_PAGE.OSHI, text: 'Select 🙋' },
               { type: 'action', action: ACTION.NO, text: 'Maybe Later' },
             ]}
           >

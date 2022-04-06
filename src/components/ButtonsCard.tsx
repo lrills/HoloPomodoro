@@ -1,10 +1,12 @@
-import Machinat, { makeContainer, MachinatNode } from '@machinat/core';
+import Machinat, { MachinatNode } from '@machinat/core';
 import * as Messenger from '@machinat/messenger/components';
+import { WebviewButton as MessengerWebviewButton } from '@machinat/messenger/webview';
 import * as Telegram from '@machinat/telegram/components';
+import { WebviewButton as TelegramWebviewButton } from '@machinat/telegram/webview';
 import * as Line from '@machinat/line/components';
+import { WebviewAction as LineWebviewAction } from '@machinat/line/webview';
 import encodePostbackData from '../utils/encodePostbackData';
-import { ServerDomainI, LineLiffIdI } from '../constant';
-import { AppActionType, WebviewPath } from '../types';
+import { AppActionType, WebviewPage } from '../types';
 
 type ActionButtonData = {
   type: 'action';
@@ -15,7 +17,7 @@ type ActionButtonData = {
 type WebviewButtonData = {
   type: 'webview';
   text: string;
-  path: WebviewPath;
+  page: WebviewPage;
 };
 
 export type ButtonData = ActionButtonData | WebviewButtonData;
@@ -27,87 +29,73 @@ type ButtonsCardProps = {
 
 const encodeActionType = (type) => encodePostbackData({ action: type });
 
-const ButtonsCard =
-  (domain: string, liffId: string) =>
-  ({ children, buttons }: ButtonsCardProps, { platform }) => {
-    switch (platform) {
-      case 'messenger':
-        return (
-          <Messenger.ButtonTemplate
-            buttons={buttons.map((button) =>
-              button.type === 'action' ? (
-                <Messenger.PostbackButton
-                  title={button.text}
-                  payload={encodeActionType(button.action)}
-                />
-              ) : button.type === 'webview' ? (
-                <Messenger.UrlButton
-                  title={button.text}
-                  url={`https://${domain}/webview/${button.path}?platform=messenger`}
-                  messengerExtensions
-                />
-              ) : null
-            )}
-          >
-            {children}
-          </Messenger.ButtonTemplate>
-        );
+const ButtonsCard = ({ children, buttons }: ButtonsCardProps, { platform }) => {
+  switch (platform) {
+    case 'messenger':
+      return (
+        <Messenger.ButtonTemplate
+          buttons={buttons.map((button) =>
+            button.type === 'action' ? (
+              <Messenger.PostbackButton
+                title={button.text}
+                payload={encodeActionType(button.action)}
+              />
+            ) : button.type === 'webview' ? (
+              <MessengerWebviewButton title={button.text} page={button.page} />
+            ) : null
+          )}
+        >
+          {children}
+        </Messenger.ButtonTemplate>
+      );
 
-      case 'telegram':
-        return (
-          <Telegram.Text
-            replyMarkup={
-              <Telegram.InlineKeyboard>
-                {buttons.map((button) =>
-                  button.type === 'action' ? (
-                    <Telegram.CallbackButton
-                      text={button.text}
-                      data={encodeActionType(button.action)}
-                    />
-                  ) : button.type === 'webview' ? (
-                    <Telegram.UrlButton
-                      login
-                      text={button.text}
-                      url={`https://${domain}/auth/telegram?redirectUrl=${encodeURIComponent(
-                        `/webview/${button.path}`
-                      )}`}
-                    />
-                  ) : null
-                )}
-              </Telegram.InlineKeyboard>
-            }
-          >
-            {children}
-          </Telegram.Text>
-        );
+    case 'telegram':
+      return (
+        <Telegram.Text
+          replyMarkup={
+            <Telegram.InlineKeyboard>
+              {buttons.map((button) =>
+                button.type === 'action' ? (
+                  <Telegram.CallbackButton
+                    text={button.text}
+                    data={encodeActionType(button.action)}
+                  />
+                ) : button.type === 'webview' ? (
+                  <TelegramWebviewButton
+                    text={button.text}
+                    page={button.page}
+                  />
+                ) : null
+              )}
+            </Telegram.InlineKeyboard>
+          }
+        >
+          {children}
+        </Telegram.Text>
+      );
 
-      case 'line':
-        return (
-          <Line.ButtonTemplate
-            altText={(template) => template.text}
-            actions={buttons.map((button) =>
-              button.type === 'action' ? (
-                <Line.PostbackAction
-                  label={button.text}
-                  data={encodeActionType(button.action)}
-                />
-              ) : button.type === 'webview' ? (
-                <Line.UriAction
-                  label={button.text}
-                  uri={`https://liff.line.me/${liffId}/${button.path}`}
-                />
-              ) : null
-            )}
-          >
-            {children}
-          </Line.ButtonTemplate>
-        );
+    case 'line':
+      return (
+        <Line.ButtonTemplate
+          altText={(template) => template.text}
+          actions={buttons.map((button) =>
+            button.type === 'action' ? (
+              <Line.PostbackAction
+                label={button.text}
+                data={encodeActionType(button.action)}
+              />
+            ) : button.type === 'webview' ? (
+              <LineWebviewAction label={button.text} page={button.page} />
+            ) : null
+          )}
+        >
+          {children}
+        </Line.ButtonTemplate>
+      );
 
-      default:
-        return <>{children}</>;
-    }
-  };
+    default:
+      return <>{children}</>;
+  }
+};
 
-export default makeContainer({
-  deps: [ServerDomainI, LineLiffIdI],
-})(ButtonsCard);
+export default ButtonsCard;
