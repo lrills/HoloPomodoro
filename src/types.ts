@@ -2,10 +2,14 @@ import type { MachinatProfile } from '@machinat/core';
 import type { MessengerEventContext } from '@machinat/messenger';
 import type { TelegramEventContext } from '@machinat/telegram';
 import type { LineEventContext } from '@machinat/line';
-import type MessengerWebviewAuth from '@machinat/messenger/webview';
-import type LineWebviewAuth from '@machinat/line/webview';
-import type TelegramWebviewAuth from '@machinat/telegram/webview';
-import type { WebviewEventContext } from '@machinat/webview';
+import type MessengerAuth from '@machinat/messenger/webview';
+import type LineAuth from '@machinat/line/webview';
+import type TelegramAuth from '@machinat/telegram/webview';
+import type {
+  WebviewEventContext,
+  ConnectEventValue,
+  DisconnectEventValue,
+} from '@machinat/webview';
 import type { ACTION, WEBVIEW_PAGE } from './constant';
 
 export type LanguageConfig = {
@@ -127,27 +131,26 @@ export type UpdateOshiAction = {
 
 export type UpdateSubscriptionsAction = {
   category: 'app';
-  type: 'update_subscriptions';
+  type: 'update_subs';
   payload: { subscriptions: string[] };
 };
 
-export type FetchDataAction = {
+export type UpdateTimezoneAction = {
   category: 'app';
-  type: 'fetch_data';
+  type: 'update_tz';
   payload: { timezone: number };
 };
 
 export type WebviewAction =
   | UpdateSettingsAction
-  | FetchDataAction
   | UpdateOshiAction
+  | UpdateTimezoneAction
   | UpdateSubscriptionsAction;
 
-export type WebEventContext<Action extends WebviewAction = WebviewAction> =
-  WebviewEventContext<
-    MessengerWebviewAuth | TelegramWebviewAuth | LineWebviewAuth,
-    Action
-  >;
+export type WebEventContext = WebviewEventContext<
+  MessengerAuth | TelegramAuth | LineAuth,
+  WebviewAction | ConnectEventValue | DisconnectEventValue
+>;
 
 export type WebAppData = AppData & {
   userProfile: null | MachinatProfile;

@@ -16,10 +16,6 @@ import type {
   ChatEventContext,
   WebEventContext,
   AppEventContext,
-  FetchDataAction,
-  UpdateOshiAction,
-  UpdateSettingsAction,
-  UpdateSubscriptionsAction,
 } from './types';
 
 const CLIP_LANGUAGE_CODES = Object.keys(clipLanguages);
@@ -36,7 +32,7 @@ const main = (
 
   const settingsUpdate$: Stream<AppEventContext> = webview$.pipe(
     filter(
-      (ctx): ctx is WebEventContext<UpdateSettingsAction> =>
+      (ctx): ctx is WebEventContext & { event: { type: 'update_settings' } } =>
         ctx.event.type === 'update_settings'
     ),
     map(
@@ -75,7 +71,7 @@ const main = (
 
   const oshiUpdate$: Stream<AppEventContext> = webview$.pipe(
     filter(
-      (ctx): ctx is WebEventContext<UpdateOshiAction> =>
+      (ctx): ctx is WebEventContext & { event: { type: 'update_oshi' } } =>
         ctx.event.type === 'update_oshi'
     ),
     map(
@@ -126,8 +122,8 @@ const main = (
 
   const subscriptionsUpdate$: Stream<AppEventContext> = webview$.pipe(
     filter(
-      (ctx): ctx is WebEventContext<UpdateSubscriptionsAction> =>
-        ctx.event.type === 'update_subscriptions'
+      (ctx): ctx is WebEventContext & { event: { type: 'update_subs' } } =>
+        ctx.event.type === 'update_subs'
     ),
     map(
       makeContainer({ deps: [useSettings] })(
@@ -273,33 +269,48 @@ const main = (
     )
     .catch(console.error);
 
-  // push web app data when get_data action received
+  // push web app data when connect
   webview$.pipe(
     filter(
-      (ctx): ctx is WebEventContext<FetchDataAction> =>
-        ctx.event.type === 'fetch_data'
+      (ctx): ctx is WebEventContext & { event: { type: 'connect' } } =>
+        ctx.event.type === 'connect'
     ),
     tap(
       makeContainer({ deps: [useAppData, useUserProfile] })(
         (getAppData, getUserProfile) =>
           async ({ bot, event, metadata: { auth } }) => {
-            const { timezone } = event.payload;
-
             const [{ settings, statistics }, userProfile] = await Promise.all([
-              getAppData(auth.channel, (data) => {
-                const { settings } = data;
-                if (settings.timezone === timezone) {
-                  return data;
-                }
-                return { ...data, settings: { ...settings, timezone } };
-              }),
+              getAppData(auth.channel),
               getUserProfile(auth.user),
             ]);
-
             await bot.send(event.channel, {
               category: 'app',
               type: 'app_data',
               payload: { settings, statistics, userProfile },
+            });
+          }
+      )
+    )
+  );
+
+  // silently update timezone from browser
+  webview$.pipe(
+    filter(
+      (ctx): ctx is WebEventContext & { event: { type: 'update_tz' } } =>
+        ctx.event.type === 'update_tz'
+    ),
+    tap(
+      makeContainer({ deps: [useAppData] })(
+        (getAppData) =>
+          async ({ event, metadata: { auth } }) => {
+            const { timezone } = event.payload;
+
+            await getAppData(auth.channel, (data) => {
+              const { settings } = data;
+              if (settings.timezone === timezone) {
+                return data;
+              }
+              return { ...data, settings: { ...settings, timezone } };
             });
           }
       )

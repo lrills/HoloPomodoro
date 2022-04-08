@@ -3,13 +3,9 @@ import AppFrame from '../components/AppFrame';
 import VtuberMenu from '../components/VtuberMenu';
 import Container from '@mui/material/Container';
 import UpdateBar from '../components/UpdateBar';
-import { PanelPageProps } from '../types';
+import { PageProps } from '../types';
 
-const SettingsPanel = ({
-  appData,
-  sendAction,
-  closeWebview,
-}: PanelPageProps) => {
+const SettingsPanel = ({ appData, sendAction, closeWebview }: PageProps) => {
   const oshi = appData?.settings.oshi;
   const currentSubscriptions = appData?.settings.subscriptions;
 
@@ -60,7 +56,7 @@ const SettingsPanel = ({
           handleUpdate={() => {
             setUpdating(true);
             sendAction({
-              type: 'update_subscriptions',
+              type: 'update_subs',
               payload: { subscriptions: Array.from(subscriptions) },
             });
           }}

@@ -73,7 +73,9 @@ export default build<
           return {
             ...vars,
             action: intent.type,
-            isConfirmed: !!vars.settings.oshi && intent.type === ACTION.OK,
+            isConfirmed:
+              !!vars.settings.oshi &&
+              (intent.type === ACTION.OK || intent.type === ACTION.START),
           };
         }}
       />

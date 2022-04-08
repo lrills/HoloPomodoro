@@ -34,8 +34,8 @@
     "@machinat/redis-state": "^0.6.0-canary.2",
     "@machinat/script": "^0.6.0-canary.0",
     "@machinat/stream": "^0.6.0-canary.0",
-    "@machinat/telegram": "^0.6.0-canary.3",
-    "@machinat/webview": "^0.6.0-canary.3",
+    "@machinat/telegram": "^0.6.0-canary.4",
+    "@machinat/webview": "^0.6.0-canary.5",
     "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.0.0",
     "commander": "^7.2.0",
@@ -43,6 +43,7 @@
     "node-fetch": "^2.6.6",
     "ordinal": "^1.0.3",
     "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-vis": "^1.11.7",
     "umzug": "^3.0.0"
   },

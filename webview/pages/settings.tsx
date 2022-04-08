@@ -12,18 +12,14 @@ import AppFrame from '../components/AppFrame';
 import NummericSetting from '../components/NummericSetting';
 import UpdateBar from '../components/UpdateBar';
 import getVtuber from '../utils/getVtuber';
-import { AppSettings, PanelPageProps } from '../types';
+import { AppSettings, PageProps } from '../types';
 
 const displayVtuber = (id?: null | string) => {
   const vtuber = getVtuber(id);
   return vtuber ? `${vtuber.englishName}${vtuber.oshiIcon}` : '';
 };
 
-const SettingsPanel = ({
-  appData,
-  sendAction,
-  closeWebview,
-}: PanelPageProps) => {
+const SettingsPanel = ({ appData, sendAction, closeWebview }: PageProps) => {
   const settings = appData?.settings || null;
   const [settingsInput, setSettingsInput] = React.useState<
     Partial<AppSettings>

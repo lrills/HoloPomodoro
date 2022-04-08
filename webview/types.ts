@@ -4,7 +4,6 @@ import type {
   UpdateOshiAction,
   UpdateSubscriptionsAction,
 } from '../src/types';
-
 export type {
   AppSettings,
   UpdateSettingsAction,
@@ -20,7 +19,7 @@ export type SendWebActionFn = (
   >
 ) => void;
 
-export type PanelPageProps = {
+export type PageProps = {
   appData: WebAppData | null;
   sendAction: SendWebActionFn;
   closeWebview: () => boolean;

@@ -14,10 +14,10 @@ import {
   Appointments,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import ordinal from 'ordinal';
-import { PanelPageProps } from '../types';
+import { PageProps } from '../types';
 import getVtuber from '../utils/getVtuber';
 
-const StatisticsPanel = ({ appData }: PanelPageProps) => {
+const StatisticsPanel = ({ appData }: PageProps) => {
   const [chartWidth, setChartWidth] = React.useState(300);
   const chartPaperRef = React.useCallback((node) => {
     if (node !== null) {

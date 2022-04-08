@@ -3,13 +3,9 @@ import AppFrame from '../components/AppFrame';
 import VtuberMenu from '../components/VtuberMenu';
 import Container from '@mui/material/Container';
 import UpdateBar from '../components/UpdateBar';
-import { PanelPageProps } from '../types';
+import { PageProps } from '../types';
 
-const SettingsPanel = ({
-  appData,
-  sendAction,
-  closeWebview,
-}: PanelPageProps) => {
+const SettingsPanel = ({ appData, sendAction, closeWebview }: PageProps) => {
   const currentOshi = appData?.settings.oshi || null;
   const [isUpdating, setUpdating] = React.useState(false);
   const [selectedOshi, setSelectedOshi] = React.useState<string | null>(
