@@ -162,7 +162,8 @@ const createApp = (options?: CreateAppOptions) => {
         cookieSameSite: 'none',
         basicAuth: {
           appName: APP_NAME,
-          appIconUrl: 'https://machinat.com/img/logo.jpg',
+          appIconUrl:
+            'https://raw.githubusercontent.com/lrills/HoloPomodoro/main/media/avatar.png',
         },
 
         noNextServer: options?.noServer,

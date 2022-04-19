@@ -8,7 +8,7 @@ const About = () => (
     <br />
     Check the source code to learn more:
     <br />
-    https://github.com/lrills/holo-pomodoro
+    https://github.com/lrills/HoloPomodoro
   </p>
 );
 
