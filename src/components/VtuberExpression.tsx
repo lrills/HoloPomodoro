@@ -24,8 +24,10 @@ export default makeContainer({
     const oshiVtuber = getVtuber(settings?.oshi);
 
     if (oshiVtuber) {
+      const iconTag = `icon-${oshiVtuber.id}`;
+
       if (platform === 'messenger') {
-        const personaId = await messengerAssetManager.getPersona(oshiVtuber.id);
+        const personaId = await messengerAssetManager.getPersona(iconTag);
         expression = (
           <Messenger.Expression personaId={personaId}>
             {children}
