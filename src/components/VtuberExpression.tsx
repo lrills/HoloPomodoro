@@ -1,6 +1,8 @@
 import Machinat, { makeContainer, MachinatNode } from '@machinat/core';
-import MessengerAssetManager from '@machinat/messenger/asset';
 import * as Messenger from '@machinat/messenger/components';
+import MessengerAssetManager from '@machinat/messenger/asset';
+import * as Twitter from '@machinat/twitter/components';
+import TwitterAssetManager from '@machinat/twitter/asset';
 import * as Line from '@machinat/line/components';
 import getVtuber from '../utils/getVtuber';
 import { OshiVtuberI } from '../constant';
@@ -12,8 +14,8 @@ type VTuberExpressionProps = {
 };
 
 export default makeContainer({
-  deps: [MessengerAssetManager],
-})(function VTuberExpression(messengerAssetManager) {
+  deps: [MessengerAssetManager, TwitterAssetManager],
+})(function VTuberExpression(messengerAssetManager, twitterAssetManager) {
   return async (
     { settings, children }: VTuberExpressionProps,
     { platform }
@@ -29,6 +31,12 @@ export default makeContainer({
             {children}
           </Messenger.Expression>
         );
+      } else if (platform === 'twitter') {
+        // NOTE: the API is not available yet
+        // const customProfileId = await twitterAssetManager.getCustomProfile(
+        //   oshiVtuber.id
+        // );
+        expression = <Twitter.Expression>{children}</Twitter.Expression>;
       } else if (platform === 'line') {
         // TODO: line sender
         expression = <Line.Expression>{children}</Line.Expression>;

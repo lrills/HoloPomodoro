@@ -39,7 +39,7 @@ export default build<
     {() => (
       <>
         <p>Hello! 👋</p>
-        <p>I'm HoloPomodoro Bot 🤖</p>
+        <p>I'm ▶️ HoloPomodoro Bot 🤖</p>
         <Pause />
       </>
     )}

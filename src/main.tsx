@@ -160,7 +160,15 @@ const main = (
   );
 
   const chat$: Stream<AppEventContext> = event$.pipe(
-    filter((ctx): ctx is ChatEventContext => ctx.platform !== 'webview'),
+    filter(
+      (
+        ctx
+      ): ctx is ChatEventContext & {
+        event: { category: 'postback' | 'message' };
+      } =>
+        ctx.platform !== 'webview' &&
+        (ctx.event.category === 'postback' || ctx.event.category === 'message')
+    ),
     map(
       makeContainer({ deps: [useIntent] })((getIntent) => async (ctx) => {
         const intent = await getIntent(ctx.event);

@@ -3,24 +3,31 @@ import App from 'next/app';
 import getConfig from 'next/config';
 import { useEventReducer, useClient } from '@machinat/webview/client';
 import MessengerAuth from '@machinat/messenger/webview/client';
+import TwitterAuth from '@machinat/twitter/webview/client';
 import TelegramAuth from '@machinat/telegram/webview/client';
 import LineAuth from '@machinat/line/webview/client';
 import { WebAppData, SendWebActionFn, WebviewAction } from '../types';
 
 const {
-  publicRuntimeConfig: { messengerPageId, telegramBotName, lineLiffId },
+  publicRuntimeConfig: {
+    MESSENGER_PAGE_ID,
+    TWITTER_AGENT_ID,
+    TELEGRAM_BOT_NAME,
+    LINE_LIFF_ID,
+  },
 } = getConfig();
 
 const PomodoroApp = ({ Component, pageProps }) => {
   const client = useClient<
-    MessengerAuth | TelegramAuth | LineAuth,
+    MessengerAuth | TwitterAuth | TelegramAuth | LineAuth,
     WebviewAction
   >({
     mockupMode: typeof window === 'undefined',
     authPlatforms: [
-      new MessengerAuth({ pageId: messengerPageId }),
-      new TelegramAuth({ botName: telegramBotName }),
-      new LineAuth({ liffId: lineLiffId }),
+      new MessengerAuth({ pageId: MESSENGER_PAGE_ID }),
+      new TwitterAuth({ agentId: TWITTER_AGENT_ID }),
+      new TelegramAuth({ botName: TELEGRAM_BOT_NAME }),
+      new LineAuth({ liffId: LINE_LIFF_ID }),
     ],
   });
 

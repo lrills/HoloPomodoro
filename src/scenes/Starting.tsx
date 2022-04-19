@@ -104,8 +104,10 @@ export default build<
                 remainingTime={vars.remainingTime}
               >
                 {vars.isFirstTime ? (
-                  platform === 'telegram' ? (
-                    <>Press the "Start ▶️" button to get started 👇</>
+                  platform === 'twitter' || platform === 'telegram' ? (
+                    <>
+                      Press [ Start ▶️ ] 👇 to begin your first <PomodoroIcon />
+                    </>
                   ) : (
                     <>
                       Let's start your first <PomodoroIcon />

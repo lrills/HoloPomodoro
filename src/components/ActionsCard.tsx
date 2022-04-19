@@ -1,5 +1,6 @@
 import Machinat, { MachinatNode } from '@machinat/core';
 import * as Messenger from '@machinat/messenger/components';
+import * as Twitter from '@machinat/twitter/components';
 import * as Telegram from '@machinat/telegram/components';
 import * as Line from '@machinat/line/components';
 import encodePostbackData from '../utils/encodePostbackData';
@@ -35,6 +36,20 @@ const ActionsCard = ({ children, actions }: ActionsCardProps, { platform }) => {
         >
           {children}
         </Messenger.ButtonTemplate>
+      );
+
+    case 'twitter':
+      return (
+        <Twitter.DirectMessage
+          quickReplies={actions.map((action) => (
+            <Twitter.QuickReply
+              label={action.text}
+              metadata={encodeActionType(action.type)}
+            />
+          ))}
+        >
+          {children}
+        </Twitter.DirectMessage>
       );
 
     case 'telegram':

@@ -1,5 +1,6 @@
 import Machinat from '@machinat/core';
 import * as Messenger from '@machinat/messenger/components';
+import * as Twitter from '@machinat/twitter/components';
 import * as Telegram from '@machinat/telegram/components';
 import * as Line from '@machinat/line/components';
 import encodePostbackData from '../utils/encodePostbackData';
@@ -55,6 +56,28 @@ const ClipCard = (
           }
         />
       </Messenger.GenericTemplate>
+    );
+  }
+
+  if (platform === 'twitter') {
+    return (
+      <Twitter.DirectMessage
+        media={<Twitter.Photo url={imageUrl} />}
+        buttons={
+          withYoutubeButton && (
+            <Twitter.UrlButton label={youtubeLabel} url={youtubeUrl} />
+          )
+        }
+        quickReplies={
+          withMoreButton && (
+            <Twitter.QuickReply label="More 📼" metadata={moreActionData} />
+          )
+        }
+      >
+        <b>{title}</b>
+        <br />
+        <i>{clipDuration}</i>
+      </Twitter.DirectMessage>
     );
   }
 

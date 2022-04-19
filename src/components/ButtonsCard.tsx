@@ -1,6 +1,8 @@
 import Machinat, { MachinatNode } from '@machinat/core';
 import * as Messenger from '@machinat/messenger/components';
 import { WebviewButton as MessengerWebviewButton } from '@machinat/messenger/webview';
+import * as Twitter from '@machinat/twitter/components';
+import { WebviewButton as TwitterWebviewButton } from '@machinat/twitter/webview';
 import * as Telegram from '@machinat/telegram/components';
 import { WebviewButton as TelegramWebviewButton } from '@machinat/telegram/webview';
 import * as Line from '@machinat/line/components';
@@ -47,6 +49,27 @@ const ButtonsCard = ({ children, buttons }: ButtonsCardProps, { platform }) => {
         >
           {children}
         </Messenger.ButtonTemplate>
+      );
+
+    case 'twitter':
+      return (
+        <Twitter.DirectMessage
+          quickReplies={buttons
+            .filter((btn): btn is ActionButtonData => btn.type === 'action')
+            .map((button) => (
+              <Twitter.QuickReply
+                label={button.text}
+                metadata={encodeActionType(button.action)}
+              />
+            ))}
+          buttons={buttons
+            .filter((btn): btn is WebviewButtonData => btn.type === 'webview')
+            .map((button) => (
+              <TwitterWebviewButton label={button.text} page={button.page} />
+            ))}
+        >
+          {children}
+        </Twitter.DirectMessage>
       );
 
     case 'telegram':

@@ -32,20 +32,13 @@ const useIntent =
       };
     }
 
-    if (
-      (event.platform === 'messenger' &&
-        (event.type === 'quick_reply' || event.type === 'postback')) ||
-      (event.platform === 'telegram' && event.type === 'callback_query') ||
-      (event.platform === 'line' && event.type === 'postback')
-    ) {
-      if (event.data) {
-        const { action, ...payload } = decodePostbackData(event.data);
-        return {
-          type: action as AppActionType,
-          confidence: 1,
-          payload,
-        };
-      }
+    if ('data' in event && event.data) {
+      const { action, ...payload } = decodePostbackData(event.data);
+      return {
+        type: action as AppActionType,
+        confidence: 1,
+        payload,
+      };
     }
 
     return { type: ACTION.UNKNOWN, confidence: 0, payload: null };

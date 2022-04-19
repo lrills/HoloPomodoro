@@ -1,10 +1,12 @@
 import type { MachinatProfile } from '@machinat/core';
 import type { MessengerEventContext } from '@machinat/messenger';
+import type { TwitterEventContext } from '@machinat/twitter';
 import type { TelegramEventContext } from '@machinat/telegram';
 import type { LineEventContext } from '@machinat/line';
 import type MessengerAuth from '@machinat/messenger/webview';
-import type LineAuth from '@machinat/line/webview';
+import type TwitterAuth from '@machinat/twitter/webview';
 import type TelegramAuth from '@machinat/telegram/webview';
+import type LineAuth from '@machinat/line/webview';
 import type {
   WebviewEventContext,
   ConnectEventValue,
@@ -72,14 +74,16 @@ export type WebviewPage = typeof WEBVIEW_PAGE[keyof typeof WEBVIEW_PAGE];
 
 export type ChatEventContext =
   | MessengerEventContext
+  | TwitterEventContext
   | TelegramEventContext
   | LineEventContext;
 
 export type AppChannel = NonNullable<ChatEventContext['event']['channel']>;
 export type AppUser = NonNullable<ChatEventContext['event']['user']>;
+export type AppPlatform = NonNullable<ChatEventContext['platform']>;
 
 export type TimeUpEvent = {
-  platform: 'messenger' | 'telegram' | 'line';
+  platform: AppPlatform;
   category: 'app';
   type: 'time_up';
   payload: null;
@@ -88,7 +92,7 @@ export type TimeUpEvent = {
 };
 
 export type SettingsUpdatedEvent = {
-  platform: 'messenger' | 'telegram' | 'line';
+  platform: AppPlatform;
   category: 'app';
   type: 'settings_updated';
   payload: { settings: AppSettings };
@@ -105,7 +109,7 @@ export type AppEventIntent = {
 export type AppEventContext = (
   | ChatEventContext
   | {
-      platform: 'messenger' | 'telegram' | 'line';
+      platform: AppPlatform;
       event: TimeUpEvent | SettingsUpdatedEvent;
     }
 ) & { intent: AppEventIntent };
@@ -148,7 +152,7 @@ export type WebviewAction =
   | UpdateSubscriptionsAction;
 
 export type WebEventContext = WebviewEventContext<
-  MessengerAuth | TelegramAuth | LineAuth,
+  MessengerAuth | TwitterAuth | TelegramAuth | LineAuth,
   WebviewAction | ConnectEventValue | DisconnectEventValue
 >;
 
