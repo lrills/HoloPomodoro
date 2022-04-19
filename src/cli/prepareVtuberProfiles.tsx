@@ -62,7 +62,7 @@ async function createProfiles(
     if (!photoMediaId) {
       ({ id: photoMediaId } = await twitterAssetManager.renderMedia(
         photoTag,
-        <Twitter.Photo shared url={vtuber.photo} />
+        <Twitter.Photo shared url={vtuber.photo} mediaCategory="dm_image" />
       ));
       console.log(
         `[profile:twitter] photo of ${vtuber.englishName} is uploaded: ${photoMediaId}`
