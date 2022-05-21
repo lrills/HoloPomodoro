@@ -28,8 +28,8 @@
      showgrid="false"
      inkscape:zoom="0.29857056"
      inkscape:cx="396.89111"
-     inkscape:cy="323.20668"
-     inkscape:window-width="1920"
+     inkscape:cy="319.85739"
+     inkscape:window-width="1856"
      inkscape:window-height="1019"
      inkscape:window-x="0"
      inkscape:window-y="24"
@@ -45,12 +45,12 @@
      id="layer1"
      style="display:inline">
     <rect
-       style="fill:#d70705;fill-opacity:1;stroke:none;stroke-width:7.46711;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.997839;paint-order:stroke fill markers"
+       style="fill:#d70705;fill-opacity:1;stroke:none;stroke-width:8.04208;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.997839;paint-order:stroke fill markers"
        id="rect1018"
        width="161.114"
-       height="134.19537"
+       height="155.65732"
        x="0.0573343"
-       y="26.688978" />
+       y="5.2270303" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#008080;stroke:#008080;stroke-width:29.0325;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.997839;paint-order:stroke fill markers"
@@ -92,16 +92,16 @@
        id="rect1064"
        width="38.544205"
        height="38.544205"
-       x="-18.859274"
-       y="9.1867361"
+       x="-13.99514"
+       y="4.322257"
        transform="rotate(-44.997962)" />
     <rect
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:2.0984;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.997839;paint-order:stroke fill markers"
        id="rect1064-6"
        width="38.544205"
        height="38.544205"
-       x="8.3152027"
-       y="37.261875"
+       x="13.553493"
+       y="32.023197"
        transform="rotate(-44.997962)" />
     <rect
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:3.99391;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.997839;paint-order:stroke fill markers"
@@ -109,22 +109,22 @@
        width="161.11363"
        height="33.404255"
        x="0.05733439"
-       y="-6.7152772" />
+       y="-14.652773" />
     <rect
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:2.0984;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.997839;paint-order:stroke fill markers"
        id="rect1064-7"
        width="38.544205"
        height="38.544205"
-       x="36.382084"
-       y="66.077927"
+       x="41.620388"
+       y="60.839249"
        transform="rotate(-44.997962)" />
     <rect
        style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:2.0984;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.997839;paint-order:stroke fill markers"
        id="rect1064-35"
        width="38.544205"
        height="38.544205"
-       x="64.037186"
-       y="93.540787"
+       x="69.649597"
+       y="87.927917"
        transform="rotate(-44.997962)" />
   </g>
 </svg>
